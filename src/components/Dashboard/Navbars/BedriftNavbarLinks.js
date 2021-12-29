@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-import {useHistory } from 'react-router-dom';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,7 +26,6 @@ const useStyles = makeStyles(styles);
 
 
 export default function AdminNavbarLinks() {
-  let history = useHistory();
   const classes = useStyles();
   const [openProfile, setOpenProfile] = React.useState(null);
   

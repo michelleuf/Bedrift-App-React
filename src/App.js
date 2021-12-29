@@ -5,7 +5,7 @@ import Home from './containers/Home';
 import Login from './containers/Login';
 import Token   from './containers/Authentication'
 import Plants   from './containers/Plants'
-// import Bedrift from './containers/bedrift/layouts/Bedrift';
+import Bedrift from './containers/bedrift/layouts/Bedrift';
 function App() {
   return (
     <div className="App">
@@ -15,7 +15,7 @@ function App() {
           <Route path="/auth" exact component={Login} />
           <Route path="/redirect" exact component={Token} />  
           <Route path="/plants" exact component={Plants} />  
-          {/* <Route path="/bedrift" exact component={Bedrift} /> */}
+          <Route path="/bedrift" exact component={Bedrift} />
         </Switch>
       </Router>
     </div>

@@ -21,7 +21,7 @@ let ps;
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
+      if (prop.layout === "/bedrift") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -32,13 +32,13 @@ const switchRoutes = (
       }
       return null;
     })}
-    <Redirect from="/admin" to="/admin/dashboard" />
+    <Redirect from="/bedrift" to="/bedrift/plants" />
   </Switch>
 );
 
 const useStyles = makeStyles(styles);
 
-export default function Admin({ ...rest }) {
+export default function Bedrift({ ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -50,7 +50,7 @@ export default function Admin({ ...rest }) {
     setMobileOpen(!mobileOpen);
   };
   const getRoute = () => {
-    return window.location.pathname !== "/admin/maps";
+    return window.location.pathname !== "/bedrift/maps";
   };
   const resizeFunction = () => {
     if (window.innerWidth >= 960) {
@@ -79,7 +79,7 @@ export default function Admin({ ...rest }) {
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"Admin"}
+        logoText={"Bedrift"}
         handleDrawerToggle={handleDrawerToggle}
         open={mobileOpen}
         {...rest}
