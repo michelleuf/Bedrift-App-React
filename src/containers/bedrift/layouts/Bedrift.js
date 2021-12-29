@@ -11,10 +11,11 @@ import Footer from "../../../components/Dashboard/Footer/Footer.js";
 import Sidebar from "../../../components/Dashboard/Sidebar/Sidebar.js";
 //import FixedPlugin from "../../../components/Dashboard/FixedPlugin/FixedPlugin.js";
 
-import routes from "../../bedrift/routes/routes"
+import routes from "../../../containers/bedrift/routes/routes"
 
 import styles from "../../../assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
+import logo from "../../../assets/images/bolig-logo.png";
 
 let ps;
 
@@ -44,6 +45,7 @@ export default function Bedrift({ ...rest }) {
   // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
   // states and functions
+  
   const [mobileOpen, setMobileOpen] = React.useState(false);
  
   const handleDrawerToggle = () => {
@@ -80,6 +82,7 @@ export default function Bedrift({ ...rest }) {
       <Sidebar
         routes={routes}
         logoText={"Bedrift"}
+        logo={logo}
         handleDrawerToggle={handleDrawerToggle}
         open={mobileOpen}
         {...rest}

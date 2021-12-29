@@ -9,7 +9,7 @@ const dashboardRoutes = [
     name: "Plants",
     icon: Dashboard,
     component: Plants,
-    layout: "/admin",
+    layout: "/bedrift",
   },
 ];
 
