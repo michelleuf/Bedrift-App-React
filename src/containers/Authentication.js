@@ -12,6 +12,7 @@ export default function Authentication() {
   };
     
   //get access token
+  const [tokenHandle, setTokenHandle] = React.useState(false);
   const getToken =() =>{
     const authCode = data;
     console.log(authCode);
@@ -25,10 +26,6 @@ export default function Authentication() {
     urlencoded.append("code", authCode);
     urlencoded.append("redirect_uri", "http://localhost:3000/redirect");
     urlencoded.append("scope", "openid");
-
-    // urlencoded.append("username",process.env.REACT_APP_USERNAME);
-    // urlencoded.append("password",process.env.REACT_APP_PASSWORD);
-    // urlencoded.append("grant_type",'password' );
     
     var requestOptions = {
       method: 'POST',
@@ -41,7 +38,8 @@ export default function Authentication() {
         try {
           const data1 = await response.json();
           console.log('respose data ?',data1);
-          sessionStorage.setItem('access_token', data1['access_token'])
+          sessionStorage.setItem('token', data1['access_token'])
+          setTokenHandle(true);
         } catch (error) {
           console.log('error happened here!!!!')
           console.log(error)
@@ -57,6 +55,9 @@ export default function Authentication() {
       if (data !== "") getToken();
     },[data]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(()=>{
+      if (tokenHandle) window.location.href = '/bedrift';
+    },[tokenHandle]); // eslint-disable-line react-hooks/exhaustive-deps
     return (
         <div>
           Access Token generating...
