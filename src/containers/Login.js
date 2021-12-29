@@ -21,6 +21,7 @@ export default function Login() {
 
     return (
         <div>
+            Loading...
         </div>
     )
 }
