@@ -4,11 +4,10 @@ import { api } from "../urlConfig.js";
 
 
 export default function Plants() {
-    const [data, setData] = useState();
+    const [data, setData] = useState([]);
 
     const getdata =() =>{
-        // const token = window.localStorage.getItem('token');
-        const token = process.env.REACT_APP_TOKEN;
+        const token = window.sessionStorage.getItem('token');
           axios.get(`${api}plants`,{
             headers: {
               'Authorization': token ? `Bearer ${token}` : '',
@@ -17,13 +16,13 @@ export default function Plants() {
             })
           .then(res =>{
             const results =  res.data;
-             console.log(results);
+            console.log(results);
             setData(results);
           })
       }
     React.useEffect(()=>{
         getdata();
-      });
+      },[]);
     return (
         <div>
             hello plants
