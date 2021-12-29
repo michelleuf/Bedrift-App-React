@@ -10,10 +10,9 @@ import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import CustomInput from "../../components/Dashboard/CustomInput/CustomInput.js";
 import Card from "../../components/Dashboard/Card/Card.js";
 import CardHeader from "../../components/Dashboard/Card/CardHeader.js";
-import CardAvatar from "../../components/Dashboard/Card/CardAvatar.js";
 import CardBody from "../../components/Dashboard/Card/CardBody.js";
 
-import avatar from "../../assets/images/admin.png";
+// import avatar from "../../assets/images/admin.png";
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle";
 
 
@@ -43,9 +42,6 @@ export default function UserProfile() {
       <GridContainer justifyContent="center">
         <GridItem xs={12} sm={10} md={3}>
           <Card profile>
-            <CardAvatar profile>
-                <img src={avatar} alt="..." />
-            </CardAvatar>
             <CardBody profile>
               <h4 className={classes.cardCategory}>Administrator</h4>
               <h1 className={classes.cardTitle}>{data.firstname} {data.lastname}</h1>         

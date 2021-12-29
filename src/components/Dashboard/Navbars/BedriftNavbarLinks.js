@@ -1,9 +1,6 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import classNames from "classnames";
-import { Redirect, useHistory } from 'react-router-dom';
-import axios from 'axios';
-import { backendUrl } from "../../../urlConfig";
+import {useHistory } from 'react-router-dom';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -32,18 +29,8 @@ const useStyles = makeStyles(styles);
 export default function AdminNavbarLinks() {
   let history = useHistory();
   const classes = useStyles();
-  const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
-  const handleClickNotification = (event) => {
-    if (openNotification && openNotification.contains(event.target)) {
-      setOpenNotification(null);
-    } else {
-      setOpenNotification(event.currentTarget);
-    }
-  };
-  const handleCloseNotification = () => {
-    setOpenNotification(null);
-  };
+  
   const handleClickProfile = (event) => {
     if (openProfile && openProfile.contains(event.target)) {
       setOpenProfile(null);
@@ -53,23 +40,6 @@ export default function AdminNavbarLinks() {
   };
   const handleCloseProfile = () => {
     setOpenProfile(null);
-  };
-  const dispatch = useDispatch();
-  const logout = async ()=>{
-    // console.log("gggggggllll");
-    // localStorage.clear();
-    const res = await axios.post(`${backendUrl}/admin/signout`);
-    if(res.status === 200){
-      localStorage.clear();
-      history.push("/");
-      // return <Redirect to={'/'} />
-      // <Redirect to={'/'} />
-      
-    }
-
-    // dispatch(signout);
-    // signout);
-  
   };
   
   return (
@@ -138,7 +108,6 @@ export default function AdminNavbarLinks() {
 
                     <Divider light />
                     <MenuItem
-                      onClick={logout}
                       className={classes.dropdownItem} >
                       Logout
                     </MenuItem>

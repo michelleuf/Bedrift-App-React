@@ -7,19 +7,19 @@ export default function Plants() {
     const [data, setData] = useState();
 
     const getdata =() =>{
-        const token = window.localStorage.getItem('token');
-          axios.get(`${api}/plants`,{
+        // const token = window.localStorage.getItem('token');
+        const token = process.env.REACT_APP_TOKEN;
+          axios.get(`${api}plants`,{
             headers: {
               'Authorization': token ? `Bearer ${token}` : '',
               'Access-Control-Allow-Origin': '*',
             }
             })
           .then(res =>{
-            const results =  res.data.row;
-            //  console.log(results);
+            const results =  res.data;
+             console.log(results);
             setData(results);
           })
-        
       }
     React.useEffect(()=>{
         getdata();

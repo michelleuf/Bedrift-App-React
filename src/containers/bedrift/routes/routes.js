@@ -14,6 +14,7 @@ import Report from "../Reports.js";
 import Employees from "../Employees"
 import Medicine from "../Medicine"
 import PharmacyPayble from "../PharmacyPayble.js";
+import Plants from "../Plants";
 
 const dashboardRoutes = [
   {
@@ -21,6 +22,13 @@ const dashboardRoutes = [
     name: "Dashboard",
     icon: Dashboard,
     component: DashboardPage,
+    layout: "/admin",
+  },
+  {
+    path: "/plants",
+    name: "Plants",
+    icon: Dashboard,
+    component: Plants,
     layout: "/admin",
   },
   {

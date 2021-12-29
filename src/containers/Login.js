@@ -1,6 +1,4 @@
-import React from 'react'
-import { Markup } from 'interweave';
-
+import React from 'react';
 
 export default function Login() {
   // const [data, setData] = React.useState();
@@ -16,12 +14,13 @@ export default function Login() {
   //       .then(result => setData(result))
   //       .catch(error => console.log('error', error));
   //   }
-  //     React.useEffect(()=>{
-  //       LoadPage();
-  //     });
+      React.useEffect(()=>{
+          window.location.href = "https://testauth.boligmappa.no/auth/realms/professional-realm-staging/protocol/openid-connect/auth?client_id=staging-michelle&scope=openid&redirect_uri=http://localhost:3000/redirect&response_type=code";
+      // LoadPage();
+      });
+
     return (
         <div>
-<object type="text/html" data="https://testauth.boligmappa.no/auth/realms/professional-realm-staging/protocol/openid-connect/auth?client_id=staging-michelle&scope=openid&redirect_uri=http://localhost:3000/redirect&response_type=code"></object>
         </div>
     )
 }

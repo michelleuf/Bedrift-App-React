@@ -10,12 +10,12 @@ import Hidden from "@material-ui/core/Hidden";
 // @material-ui/icons
 import Menu from "@material-ui/icons/Menu";
 // core components
-import AdminNavbarLinks from "./AdminNavbarLinks.js";
+import BedriftNavbarLinks from "./BedriftNavbarLinks.js";
 import Button from "../CustomButtons/Button.js";
 
 //hooks
 // mimshel import { useRouteName } from "hooks";
-import { useRouteName } from "../../../containers/admin/hooks/useRouteName";
+import { useRouteName } from "../../../containers/bedrift/hooks/useRouteName";
 
 
 import styles from "../../../assets/jss/material-dashboard-react/components/headerStyle.js";
@@ -39,7 +39,7 @@ export default function Header(props) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          <AdminNavbarLinks />
+          <BedriftNavbarLinks />
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton
