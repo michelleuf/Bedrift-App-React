@@ -15,7 +15,7 @@ export default function Plants() {
             }
             })
           .then(res =>{
-            const results =  res.data;
+            const results =  res.data.response;
             console.log(results);
             setData(results);
           })
@@ -26,7 +26,14 @@ export default function Plants() {
     return (
         <div>
             hello plants
-            {data}
+            {/* {data]} */}
+            {data.map((d,id) => 
+            {
+              return(
+                <p id={id}>{d.boligmappaNumber}</p>
+              )
+            })}
+            
         </div>
     )
 }
