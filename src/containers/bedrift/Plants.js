@@ -38,12 +38,12 @@ export default function PharmacyRequests() {
         }
         })
       .then(res =>{
-        const results =  res.data;
+        const results =  res.data.response;
         console.log(results);
         setData(results);
       })
   }
-  React.useEffect(()=>{
+React.useEffect(()=>{
     getdata();
   },[]);
 
