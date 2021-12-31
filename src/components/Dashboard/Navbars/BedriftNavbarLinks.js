@@ -39,10 +39,15 @@ export default function AdminNavbarLinks() {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
+
+  const Logout= ()=> {
+    sessionStorage.clear();
+    window.location.href = '/';
+  }
   
   return (
     <div>
-      <Link href="/admin" color="inherit">
+      <Link href="/bedrift" color="inherit">
         <Button
         color={window.innerWidth > 959 ? "transparent" : "white"}
         justIcon={window.innerWidth > 959}
@@ -95,7 +100,7 @@ export default function AdminNavbarLinks() {
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
-                  <Link href="/admin/user" color="inherit" underline='none'>
+                  <Link href="/bedrift/user" color="inherit" underline='none'>
                     <MenuItem
                       onClick={handleCloseProfile}
                       className={classes.dropdownItem}
@@ -106,6 +111,7 @@ export default function AdminNavbarLinks() {
 
                     <Divider light />
                     <MenuItem
+                      onClick={Logout}
                       className={classes.dropdownItem} >
                       Logout
                     </MenuItem>

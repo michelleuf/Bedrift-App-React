@@ -16,6 +16,7 @@ import routes from "../../../containers/bedrift/routes/routes"
 import styles from "../../../assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import logo from "../../../assets/images/bolig-logo.png";
+import bgImage from "../../../assets/images/bolig-bg.jpg";
 
 let ps;
 
@@ -45,7 +46,6 @@ export default function Bedrift({ ...rest }) {
   // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
   // states and functions
-  
   const [mobileOpen, setMobileOpen] = React.useState(false);
  
   const handleDrawerToggle = () => {
@@ -83,9 +83,12 @@ export default function Bedrift({ ...rest }) {
         routes={routes}
         logoText={"Bedrift"}
         logo={logo}
+        image={bgImage}
         handleDrawerToggle={handleDrawerToggle}
         open={mobileOpen}
+        color='blue'
         {...rest}
+
       />
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
