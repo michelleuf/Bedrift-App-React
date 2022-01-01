@@ -22,10 +22,12 @@ export default function SearchProperty () {
   };  
 
 
-  const [data, setData] = useState([]);
-  const getdata =() =>{
+  const [boligmappaNumber, setBoligmappaNumber] = useState();
+  const [plantDetails, setPlantDetails] = useState([]);
+
+  const getPlantByBlogmappaNumber =(boligmappa_number) =>{
       const token = window.sessionStorage.getItem('token');
-      axios.get(`${api}plants`,{
+      axios.get(`${api}plants/${boligmappa_number}`,{
         headers: {
           'Authorization': token ? `Bearer ${token}` : '',
           'Access-Control-Allow-Origin': '*',
@@ -34,12 +36,7 @@ export default function SearchProperty () {
         .then(res =>{
           const results =  res.data.response;
           console.log(results);
-          if (results.length === 0) {
-            alert("No plants available");
-          }
-          else{
-            setData(results);
-          }
+          setPlantDetails(results);
         });
     }
   return (
@@ -85,8 +82,48 @@ export default function SearchProperty () {
 
           >
             <b>Search for property with Boligmappanummer</b>
-            <TextField id="outlined-size-small" label="Housing Folder Number" fullWidth size="small"/>
-            <Button color="primary" size="sm">Search</Button>
+            <TextField 
+              id="outlined-size-small" 
+              label="Housing Folder Number" 
+              fullWidth size="small"
+              onChange={(e) => setBoligmappaNumber(e.target.value)}//onClick={()=>updatemedicine()}
+              />
+            <Button color="primary" size="sm" onClick={()=>getPlantByBlogmappaNumber(boligmappaNumber)}>Search</Button>
+            <div>
+              {(() => {
+                if (plantDetails){
+                  if (plantDetails.type === 'property'){
+                    return (
+                      <div>
+                        <b>plantId</b>{plantDetails.plantId}
+                        <b>createdDate</b>{plantDetails.createdDate}
+                        <b>type</b>{plantDetails.type}
+                        <b>address</b>
+                            {plantDetails.property.address.houseNumber}
+                            {plantDetails.property.address.houseSubNumber}
+                            {plantDetails.property.address.streetName}
+                            {plantDetails.property.address.postalCode}
+                            {plantDetails.property.address.postalPlace}
+                      </div>
+                    )
+                  } else{
+                    return (
+                      <div>
+                        <b>plantId</b>{plantDetails.plantId}
+                        <b>createdDate</b>{plantDetails.createdDate}
+                        <b>type</b>{plantDetails.type}
+                        <b>building address</b>
+                            {plantDetails.building.address.houseNumber}
+                            {plantDetails.building.address.houseSubNumber}
+                            {plantDetails.building.address.streetName}
+                            {plantDetails.building.address.postalCode}
+                            {plantDetails.building.address.postalPlace}
+                      </div>
+                    )
+                  }
+                } 
+              })}
+            </div>
           </Box>
           <Box
              component="form"
