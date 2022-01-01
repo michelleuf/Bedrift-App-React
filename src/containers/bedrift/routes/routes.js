@@ -6,7 +6,7 @@ import CreatePlant from "../CreatePlant";
 const dashboardRoutes = [
   {
     path: "/plants",
-    name: "Plants",
+    name: "Property",
     icon: Dashboard,
     component: Plants,
     layout: "/bedrift",

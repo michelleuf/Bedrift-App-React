@@ -18,7 +18,7 @@ import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import Card from "../../components/Dashboard/Card/Card.js";
 import CardHeader from "../../components/Dashboard/Card/CardHeader.js";
 import CardBody from "../../components/Dashboard/Card/CardBody.js";
-
+import CustomTabs from "../../components/Dashboard/CustomTabs/CustomTabs.js";
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle";
 
 const useStyles = makeStyles(styles);
@@ -28,115 +28,222 @@ export default function PharmacyRequests() {
   const [searchTerm, setSearchTerm] = useState(""); //for search function
 
  //backend connection
-  const [data, setData] = useState([]);
+  const [propertyData, setPropertyData] = useState([]);
+  const [buildingData, setBuildingData] = useState([]);
+
   const getdata =() =>{
     const token = window.sessionStorage.getItem('token');
-      axios.get(`${api}plants`,{
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-          'Access-Control-Allow-Origin': '*',
-        }
-        })
+    axios.get(`${api}plants`,{
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+        'Access-Control-Allow-Origin': '*',
+      }
+      })
       .then(res =>{
         const results =  res.data.response;
         console.log(results);
-        setData(results);
-      })
+        if (results.length === 0) {
+          alert("No plants available");
+        }
+        else{
+          const arr1 = [];
+          const arr2 = [];
+          results.forEach(element => {
+            element.property ? arr1.push(element) : arr2.push(element); 
+          });
+          setPropertyData(arr1);
+          setBuildingData(arr2); 
+        }
+      });
   }
-React.useEffect(()=>{
-    getdata();
-  },[]);
 
-  const columns = [
-    { id: 'boligmappaNumber', label: 'boligmappaNumber'},
-    { id: 'plantId', label: 'plantId'},
-    { id: 'createdDate', label: 'createdDate'},
-    { id: 'building', label: 'building'},
-    { id: 'property', label: 'property'},
-    { id: 'type', label: 'type'},]
-  const rows = data; 
-  console.log(rows);
+  console.log("propertyData",propertyData);
+  console.log("buildingData",buildingData);
+  
+  React.useEffect(()=>{
+      getdata();
+    },[]);
 
+  const PropertyColumns = [
+    { id: 'plantid', label: 'Plant Id'},
+    { id: 'createdDate', label: 'Created Date'},
+    { id: 'unitNumber', label: 'Unit Number'},
+    { id: 'share', label: 'Organization Number & Share Number'},
+    { id: 'address', label: 'Address'},
+    { id: 'boligmappaNumber', label: 'Housing Folder Number'},
+  ]
+  const BuildingColumns = [
+    { id: 'buildingNumber', label: 'Plant Id'},
+    { id: 'createdDate', label: 'Created Date'},
+    { id: 'buildingNumber', label: 'Building Number'},
+    { id: 'address', label: 'Address'},
+    { id: 'boligmappaNumber', label: 'Housing Folder Number'},
+  ]
+  
   return (
     
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Property List  </h4>
-          </CardHeader>
-          <CardBody>
-            <div>
-              <FormControl fullWidth variant="outlined" size="small">
-                <OutlinedInput
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <SearchIcon/>
-                    </InputAdornment>
-                  }
-                  onChange={(event)=>{
-                    setSearchTerm(event.target.value);
-                  }}
-                  placeholder="Search..."
-                  fontSize="small"
-                  size="sm"
-                />
-              </FormControl>
-            </div>
-            <TableScrollbar rows={20}>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          {columns.map((column) => (
-                            <TableCell style={{color:'primary',backgroundColor: "white"}}
-                              key={column.id}
-                            >
-                              {column.label}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      </TableHead>
-                      
-                      <TableBody >
-                        {rows.filter((row)=>{
-                          if (searchTerm === "") {
-                            return row
-                          } else if (row.name.toLowerCase().includes(searchTerm.toLowerCase()) || row.email.toLowerCase().includes(searchTerm.toLowerCase()) 
-                          // || row.location.toLowerCase().includes(searchTerm.toLowerCase())
-                          ){
-                            return row
+        <CustomTabs
+            title="All facilities"
+            headerColor="primary"
+            tabs={[
+              {
+                tabName: "Housing",
+                tabContent: (
+                  <div>
+                    <div>
+                      <FormControl fullWidth variant="outlined" size="small">
+                        <OutlinedInput
+                          endAdornment={
+                            <InputAdornment position="end">
+                              <SearchIcon/>
+                            </InputAdornment>
                           }
-                        }).map((row,id) => {
-                          return(
-                          <TableRow key={id}>
-                            <TableCell align="left">
-                              {row.boligmappaNumber}
-                            </TableCell>
-                            <TableCell align="left">
-                              {row.plantId}
-                            </TableCell>
-                            <TableCell align="left">
-                              {row.createdDate}
-                            </TableCell>
-                            <TableCell align="left">
-                              {row.building}
-                            </TableCell>
-                            <TableCell align="left">
-                              {row.property}
-                            </TableCell>
-                            <TableCell align="left">
-                              {row.type}
-                            </TableCell>
+                          onChange={(event)=>{
+                            setSearchTerm(event.target.value);
+                          }}
+                          placeholder="Search for property"
+                          fontSize="small"
+                          size="sm"
+                        />
+                      </FormControl>
+                    </div>
+                    <TableScrollbar rows={20}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            {PropertyColumns.map((column) => (
+                              <TableCell style={{color:'primary',backgroundColor: "white"}}
+                                key={column.id}
+                              >
+                                {column.label}
+                              </TableCell>
+                            ))}
                           </TableRow>
-                          );
-                        }
-                        )
-                        }
-                      </TableBody>
-                    </Table>
-                  </TableScrollbar>
-          </CardBody>
-        </Card>
+                        </TableHead>
+                        
+                        <TableBody >
+                          {propertyData.filter((row)=>{
+                            if (searchTerm === "") {
+                              return row
+                            } else if (row.boligmappaNumber.toLowerCase().includes(searchTerm.toLowerCase())){
+                            return row
+                            }
+                          }).map((row,id) => {
+                            return(
+                            <TableRow key={id}>
+                              <TableCell align="left">
+                                {row.plantId}
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.createdDate}
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.property.unitNumber}
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.property.share? row.property.share.organizationNumber + " - ": null }&nbsp;
+                                {row.property.share? row.property.share.shareNumber : null}  
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.property.address? row.property.address.houseNumber : null}&nbsp; 
+                                {row.property.address? row.property.address.houseSubNumber : null} &nbsp; 
+                                {row.property.address? row.property.address.streetName : null} &nbsp; 
+                                {row.property.address? row.property.address.postalCode : null} &nbsp; 
+                                {row.property.address? row.property.address.postalPlace : null}&nbsp; 
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.boligmappaNumber}
+                              </TableCell>
+                            </TableRow>
+                            );
+                          }
+                          )
+                          }
+                        </TableBody>
+                      </Table>
+                    </TableScrollbar>
+                  </div>
+                ),
+              },
+              {
+                tabName: "Building",
+                tabContent: (
+                  <div>
+                    <div>
+                      <FormControl fullWidth variant="outlined" size="small">
+                        <OutlinedInput
+                          endAdornment={
+                            <InputAdornment position="end">
+                              <SearchIcon/>
+                            </InputAdornment>
+                          }
+                          onChange={(event)=>{
+                            setSearchTerm(event.target.value);
+                          }}
+                          placeholder="Search for property"
+                          fontSize="small"
+                          size="sm"
+                        />
+                      </FormControl>
+                    </div>
+                    <TableScrollbar rows={20}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            {BuildingColumns.map((column) => (
+                              <TableCell style={{color:'primary',backgroundColor: "white"}}
+                                key={column.id}
+                              >
+                                {column.label}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        </TableHead>
+                        
+                        <TableBody >
+                          {buildingData.filter((row)=>{
+                            if (searchTerm === "") {
+                              return row
+                            } else if (row.boligmappaNumber.toLowerCase().includes(searchTerm.toLowerCase())){
+                            return row
+                            }
+                          }).map((row,id) => {
+                            return(
+                            <TableRow key={id}>
+                              <TableCell align="left">
+                                {row.plantId}
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.createdDate}
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.building.buildingNumber}
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.building.address? row.building.address.houseNumber : null}&nbsp; 
+                                {row.building.address? row.building.address.houseSubNumber : null}&nbsp;
+                                {row.building.address? row.building.address.streetName : null}&nbsp;  
+                                {row.building.address? row.building.address.postalCode : null}&nbsp;  
+                                {row.building.address? row.building.address.postalPlace : null}&nbsp; 
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.boligmappaNumber}
+                              </TableCell>
+                            </TableRow>
+                            );
+                          }
+                          )
+                          }
+                        </TableBody>
+                      </Table>
+                    </TableScrollbar>
+                  </div>
+                ),
+              }
+            ]}
+          />
       </GridItem>
     </GridContainer>
   );
