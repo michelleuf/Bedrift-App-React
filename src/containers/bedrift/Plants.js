@@ -15,11 +15,9 @@ import SearchIcon from '@material-ui/icons/Search';
 // core components
 import GridItem from "../../components/Dashboard/Grid/GridItem.js";
 import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
-import Card from "../../components/Dashboard/Card/Card.js";
-import CardHeader from "../../components/Dashboard/Card/CardHeader.js";
-import CardBody from "../../components/Dashboard/Card/CardBody.js";
 import CustomTabs from "../../components/Dashboard/CustomTabs/CustomTabs.js";
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle";
+import SearchProperty from "./SearchProperty.js";
 
 const useStyles = makeStyles(styles);
 
@@ -83,6 +81,9 @@ export default function PharmacyRequests() {
   return (
     
     <GridContainer>
+      <GridItem xs={12} sm={12} md={12}>
+        <SearchProperty/>
+      </GridItem>
       <GridItem xs={12} sm={12} md={12}>
         <CustomTabs
             title="All facilities"
