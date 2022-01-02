@@ -9,11 +9,14 @@ import DialogActions from '@mui/material/DialogActions';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import Button from "../../components/Dashboard/CustomButtons/Button";
 
 export default function SearchProperty () {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [isToggle, setIsToggle] = useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -37,6 +40,7 @@ export default function SearchProperty () {
           const results =  res.data.response;
           console.log(results);
           setPlantDetails(results);
+          setIsToggle(true);
         });
     }
   return (
@@ -90,39 +94,54 @@ export default function SearchProperty () {
               />
             <Button color="primary" size="sm" onClick={()=>getPlantByBlogmappaNumber(boligmappaNumber)}>Search</Button>
             <div>
-              {(() => {
-                if (plantDetails){
-                  if (plantDetails.type === 'property'){
-                    return (
-                      <div>
-                        <b>plantId</b>{plantDetails.plantId}
-                        <b>createdDate</b>{plantDetails.createdDate}
-                        <b>type</b>{plantDetails.type}
-                        <b>address</b>
-                            {plantDetails.property.address.houseNumber}
-                            {plantDetails.property.address.houseSubNumber}
-                            {plantDetails.property.address.streetName}
-                            {plantDetails.property.address.postalCode}
-                            {plantDetails.property.address.postalPlace}
-                      </div>
-                    )
-                  } else{
-                    return (
-                      <div>
-                        <b>plantId</b>{plantDetails.plantId}
-                        <b>createdDate</b>{plantDetails.createdDate}
-                        <b>type</b>{plantDetails.type}
-                        <b>building address</b>
-                            {plantDetails.building.address.houseNumber}
-                            {plantDetails.building.address.houseSubNumber}
-                            {plantDetails.building.address.streetName}
-                            {plantDetails.building.address.postalCode}
-                            {plantDetails.building.address.postalPlace}
-                      </div>
-                    )
-                  }
-                } 
-              })}
+              {(isToggle) && (
+                  (plantDetails.type === 'property') ?
+                      (<Box
+                        component="span"
+                        sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
+                      >
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>plantId</Typography>
+                        <Typography variant="body2">{plantDetails.plantId}</Typography>
+
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>createdDate</Typography>
+                        <Typography variant="body2">{plantDetails.createdDate}</Typography>
+
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>type</Typography>
+                        <Typography variant="body2">{plantDetails.type}</Typography>
+                        
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>address</Typography>
+                        <Typography variant="body2"> 
+                          {plantDetails.property.address? plantDetails.property.address.houseNumber : "-"}&nbsp;
+                          {plantDetails.property.address? plantDetails.property.address.houseSubNumber : null}&nbsp;
+                          {plantDetails.property.address? plantDetails.property.address.streetName : null}&nbsp;
+                          {plantDetails.property.address? plantDetails.property.address.postalCode : null}&nbsp;
+                          {plantDetails.property.address? plantDetails.property.address.postalPlace : null}</Typography>
+                           
+                      </Box>)
+                    : (plantDetails.type === 'building') &&
+                      (<Box
+                        component="span"
+                        sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
+                      >
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>plantId</Typography>
+                        <Typography variant="body2">{plantDetails.plantId}</Typography>
+
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>createdDate</Typography>
+                        <Typography variant="body2">{plantDetails.createdDate}</Typography>
+
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>type</Typography>
+                        <Typography variant="body2">{plantDetails.type}</Typography>
+                        
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>building address</Typography>
+                        <Typography variant="body2"> 
+                        {plantDetails.building.address? plantDetails.building.address.houseNumber : "-"}&nbsp;
+                        {plantDetails.building.address? plantDetails.building.address.houseSubNumber : null}&nbsp;
+                        {plantDetails.building.address? plantDetails.building.address.streetName : null}&nbsp;
+                        {plantDetails.building.address? plantDetails.building.address.postalCode : null}&nbsp;
+                        {plantDetails.building.address? plantDetails.building.address.postalPlace : null}</Typography>
+                           
+                      </Box>)
+                    )}
             </div>
           </Box>
           <Box
