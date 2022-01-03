@@ -134,12 +134,11 @@ export default function SearchProperty () {
                         
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>building address</Typography>
                         <Typography variant="body2"> 
-                        {plantDetails.building.address? plantDetails.building.address.houseNumber : "-"}&nbsp;
-                        {plantDetails.building.address? plantDetails.building.address.houseSubNumber : null}&nbsp;
-                        {plantDetails.building.address? plantDetails.building.address.streetName : null}&nbsp;
-                        {plantDetails.building.address? plantDetails.building.address.postalCode : null}&nbsp;
-                        {plantDetails.building.address? plantDetails.building.address.postalPlace : null}</Typography>
-                           
+                          {plantDetails.building.address? plantDetails.building.address.houseNumber : "-"}&nbsp;
+                          {plantDetails.building.address? plantDetails.building.address.houseSubNumber : null}&nbsp;
+                          {plantDetails.building.address? plantDetails.building.address.streetName : null}&nbsp;
+                          {plantDetails.building.address? plantDetails.building.address.postalCode : null}&nbsp;
+                          {plantDetails.building.address? plantDetails.building.address.postalPlace : null}</Typography>
                       </Box>)
                     )}
             </div>

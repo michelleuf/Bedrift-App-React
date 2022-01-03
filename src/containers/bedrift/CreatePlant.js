@@ -10,16 +10,15 @@ export default function CreatePlant() {
     const getdata =() =>{
         const token = window.sessionStorage.getItem('token');
           axios.post(`${api}plants`,{
-            data:{
-              "boligmappaNumber" : boligmappaNumber
-            }},{
+            boligmappaNumber : boligmappaNumber
+            },{
             headers: {
               'Authorization': token ? `Bearer ${token}` : '',
               'Access-Control-Allow-Origin': '*',
             }
             })
           .then(res =>{
-            const results =  res.data;
+            const results =  res.data.response;
             console.log(results);
             setData(results);
           })
@@ -28,11 +27,12 @@ export default function CreatePlant() {
     return (
         <div>
             create plants
-            response iss : {data}
-            <form onSubmit={getdata}>
-                <input type="text" value={boligmappaNumber} onChange={(e)=>setBoligmappaNumber(e.target.value)}/>
-                <button type="submit">submit</button>
+            <form>
+                <input type="text" onChange={(e)=>setBoligmappaNumber(e.target.value)}/>
+                <button type="button" onClick={getdata}>submit</button>
             </form>
+            
+            response iss : {data}
         </div>
     )
 }

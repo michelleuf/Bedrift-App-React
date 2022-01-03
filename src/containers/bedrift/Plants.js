@@ -5,7 +5,6 @@ import TableScrollbar from 'react-table-scrollbar'
 import { api } from "../../urlConfig.js";
 
 // @material-ui/core components
-import { makeStyles} from "@material-ui/core/styles";
 import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -16,13 +15,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import GridItem from "../../components/Dashboard/Grid/GridItem.js";
 import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import CustomTabs from "../../components/Dashboard/CustomTabs/CustomTabs.js";
-import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle";
 import SearchProperty from "./SearchProperty.js";
 
-const useStyles = makeStyles(styles);
-
 export default function PharmacyRequests() {
-  const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState(""); //for search function
 
  //backend connection
@@ -131,6 +126,7 @@ export default function PharmacyRequests() {
                             } else if (row.boligmappaNumber.toLowerCase().includes(searchTerm.toLowerCase())){
                             return row
                             }
+                            return null;
                           }).map((row,id) => {
                             return(
                             <TableRow key={id}>
@@ -209,6 +205,9 @@ export default function PharmacyRequests() {
                               return row
                             } else if (row.boligmappaNumber.toLowerCase().includes(searchTerm.toLowerCase())){
                             return row
+                            }
+                            else{
+                              return null;
                             }
                           }).map((row,id) => {
                             return(
