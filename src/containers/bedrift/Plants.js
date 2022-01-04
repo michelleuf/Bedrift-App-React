@@ -3,7 +3,7 @@ import React,{useState} from "react";
 import axios from 'axios';
 import TableScrollbar from 'react-table-scrollbar'
 import { api } from "../../urlConfig.js";
-
+import { Link } from "react-router-dom";
 // @material-ui/core components
 import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -16,16 +16,16 @@ import GridItem from "../../components/Dashboard/Grid/GridItem.js";
 import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import CustomTabs from "../../components/Dashboard/CustomTabs/CustomTabs.js";
 import SearchProperty from "./SearchProperty.js";
-
-export default function PharmacyRequests() {
+import { Button } from "@material-ui/core";
+export default function Plants() {
   const [searchTerm, setSearchTerm] = useState(""); //for search function
 
  //backend connection
   const [propertyData, setPropertyData] = useState([]);
   const [buildingData, setBuildingData] = useState([]);
-
+ 
   const getdata =() =>{
-    const token = window.sessionStorage.getItem('token');
+    const token = window.localStorage.getItem('token');
     axios.get(`${api}plants`,{
       headers: {
         'Authorization': token ? `Bearer ${token}` : '',
@@ -64,6 +64,8 @@ export default function PharmacyRequests() {
     { id: 'share', label: 'Organization Number & Share Number'},
     { id: 'address', label: 'Address'},
     { id: 'boligmappaNumber', label: 'Housing Folder Number'},
+    { id: 'view', label: 'View'},
+
   ]
   const BuildingColumns = [
     { id: 'buildingNumber', label: 'Plant Id'},
@@ -71,8 +73,9 @@ export default function PharmacyRequests() {
     { id: 'buildingNumber', label: 'Building Number'},
     { id: 'address', label: 'Address'},
     { id: 'boligmappaNumber', label: 'Housing Folder Number'},
+    { id: 'view', label: 'View'},
+
   ]
-  
   return (
     
     <GridContainer>
@@ -153,6 +156,9 @@ export default function PharmacyRequests() {
                               <TableCell align="left">
                                 {row.boligmappaNumber}
                               </TableCell>
+                              <TableCell align="left">
+                                <Link to={{pathname: "/bedrift/viewoneplant", state: row.boligmappaNumber}}>View</Link>
+                              </TableCell>
                             </TableRow>
                             );
                           }
@@ -230,6 +236,9 @@ export default function PharmacyRequests() {
                               </TableCell>
                               <TableCell align="left">
                                 {row.boligmappaNumber}
+                              </TableCell>
+                              <TableCell align="left">
+                                <Link to={{pathname: "bedrift/viewoneplant", state: row.boligmappaNumber}}>View</Link>
                               </TableCell>
                             </TableRow>
                             );

@@ -3,6 +3,7 @@ import Dashboard from "@material-ui/icons/Dashboard";
 
 import Plants from "../Plants";
 import CreatePlant from "../CreatePlant";
+import ViewOnePlant from "../ViewOnePlant";
 const dashboardRoutes = [
   {
     path: "/plants",
@@ -17,6 +18,14 @@ const dashboardRoutes = [
     icon: Dashboard,
     component: CreatePlant,
     layout: "/bedrift",
+  },
+  {
+    path: "/viewoneplant",
+    name: "View one Plant",
+    icon: Dashboard,
+    component: ViewOnePlant,
+    layout: "/bedrift",
+    display:false,
   },
 ];
 
