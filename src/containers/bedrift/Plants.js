@@ -16,7 +16,7 @@ import GridItem from "../../components/Dashboard/Grid/GridItem.js";
 import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import CustomTabs from "../../components/Dashboard/CustomTabs/CustomTabs.js";
 import SearchProperty from "./SearchProperty.js";
-import { Button } from "@material-ui/core";
+
 export default function Plants() {
   const [searchTerm, setSearchTerm] = useState(""); //for search function
 

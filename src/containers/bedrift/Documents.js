@@ -8,16 +8,16 @@ import TableScrollbar from 'react-table-scrollbar'
 import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import { Table,TableHead, TableBody, TableCell, TableRow } from "@material-ui/core";
+import { Table,TableHead, TableBody, TableCell, TableRow, Button } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import Box from '@material-ui/core/Box';
 
 export default function Documents(props) {
-    const [searchTerm, setSearchTerm] = useState(""); //for search bar
-
-    const [data, setData] = React.useState();
     const boligmappaNumber = props.boligmappaNumber;
 
+    const [searchTerm, setSearchTerm] = useState(""); //for search bar
+    
+    const [data, setData] = React.useState();
     const getdata =() =>{
         const token = window.localStorage.getItem('token');
         axios.get(`${api}plants/${boligmappaNumber}/files`,{
@@ -38,9 +38,7 @@ export default function Documents(props) {
         { id: 'title', label: 'title'},
         { id: 'description', label: 'description'},
         { id: 'orderNumber', label: 'orderNumber'},
-        { id: 'isVisibleInBoligmappa', label: 'isVisibleInBoligmappa'},
-        { id: 'uploadLink', label: 'uploadLink'},
-        { id: 'downloadLink', label: 'downloadLink'},
+        { id: 'downloadLink', label: 'download'},
 
     ];
 
@@ -105,13 +103,13 @@ export default function Documents(props) {
                         {row.orderNumber}
                         </TableCell>
                         <TableCell align="left">
-                        {row.isVisibleInBoligmappa}
-                        </TableCell>
-                        <TableCell align="left">
                         {row.uploadLink}
                         </TableCell>
                         <TableCell align="left">
-                        {row.downloadLink}
+                            <Button onClick={()=>{
+                                // props.history.push(`/viewoneplant/${row.fileName}`);
+                                window.location.href = row.downloadLink;
+                            }} size="small" variant="outlined" color="primary">Download</Button>
                         </TableCell>
                     </TableRow>
                     );
