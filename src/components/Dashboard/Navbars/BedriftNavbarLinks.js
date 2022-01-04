@@ -41,7 +41,7 @@ export default function AdminNavbarLinks() {
   };
 
   const Logout= ()=> {
-    sessionStorage.clear();
+    localStorage.clear();
     window.location.href = '/';
   }
   

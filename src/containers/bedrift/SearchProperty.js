@@ -29,7 +29,7 @@ export default function SearchProperty () {
   const [plantDetails, setPlantDetails] = useState([]);
 
   const getPlantByBlogmappaNumber =(boligmappa_number) =>{
-      const token = window.sessionStorage.getItem('token');
+      const token = window.localStorage.getItem('token');
       axios.get(`${api}plants/${boligmappa_number}`,{
         headers: {
           'Authorization': token ? `Bearer ${token}` : '',

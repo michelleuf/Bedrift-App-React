@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { backendUrl } from '../urlConfig';
 
-const token = window.sessionStorage.getItem('token');
+const token = window.localStorage.getItem('token');
 
 const axiosIntance = axios.create({
     baseURL: backendUrl,

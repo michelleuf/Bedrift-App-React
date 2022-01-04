@@ -7,7 +7,7 @@ export default function Authentication() {
     let search = window.location.search;
     let params = new URLSearchParams(search);
     let code = params.get('code');
-    sessionStorage.setItem('code', code);
+    localStorage.setItem('code', code);
     setData(code);
   };
     
@@ -38,7 +38,7 @@ export default function Authentication() {
         try {
           const data1 = await response.json();
           console.log('respose data ?',data1);
-          sessionStorage.setItem('token', data1['access_token'])
+          localStorage.setItem('token', data1['access_token'])
           setTokenHandle(true);
         } catch (error) {
           console.log('error happened here!!!!')

@@ -8,7 +8,7 @@ export default function CreatePlant() {
     const [boligmappaNumber, setBoligmappaNumber] = useState('');
 
     const getdata =() =>{
-        const token = window.sessionStorage.getItem('token');
+        const token = window.localStorage.getItem('token');
           axios.post(`${api}plants`,{
             boligmappaNumber : boligmappaNumber
             },{
