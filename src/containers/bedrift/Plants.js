@@ -34,7 +34,7 @@ export default function Plants() {
       })
       .then(res =>{
         const results =  res.data.response;
-        console.log(results);
+        // console.log(results);
         if (results.length === 0) {
           alert("No plants available");
         }
@@ -50,8 +50,8 @@ export default function Plants() {
       });
   }
 
-  console.log("propertyData",propertyData);
-  console.log("buildingData",buildingData);
+  // console.log("propertyData",propertyData);
+  // console.log("buildingData",buildingData);
   
   React.useEffect(()=>{
       getdata();
@@ -238,7 +238,7 @@ export default function Plants() {
                                 {row.boligmappaNumber}
                               </TableCell>
                               <TableCell align="left">
-                                <Link to={{pathname: "bedrift/viewoneplant", state: row.boligmappaNumber}}>View</Link>
+                                <Link to={{pathname: "/bedrift/viewoneplant", state: row.boligmappaNumber}}>View</Link>
                               </TableCell>
                             </TableRow>
                             );

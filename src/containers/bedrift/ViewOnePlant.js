@@ -21,19 +21,19 @@ export default function ViewOnePlant(props) {
             headerColor="primary"
             tabs={[
               {
-                tabName: "Housing",
+                tabName: "Documents",
                 tabContent: (
                  <Documents boligmappaNumber={boligmappaNumber}/>
                 ),
               },
               {
-                tabName: "Building",
+                tabName: "Projects",
                 tabContent: (
                   <Projects boligmappaNumber={boligmappaNumber}/>
                 ),
               },
               {
-                tabName: "Building",
+                tabName: "Rooms",
                 tabContent: (
                   <Rooms boligmappaNumber={boligmappaNumber}/>
                 ),

@@ -11,12 +11,49 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { Table,TableHead, TableBody, TableCell, TableRow, Button } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import Box from '@material-ui/core/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+
+
+import { styled } from '@mui/material/styles';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+
+const Input = styled('input')({
+  display: 'none',
+});
+
+
+
 
 export default function Documents(props) {
     const boligmappaNumber = props.boligmappaNumber;
 
     const [searchTerm, setSearchTerm] = useState(""); //for search bar
     
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };  
+
+    const uploadFile = () => {
+        const token = window.localStorage.getItem('token');
+        axios.post(`${api}plants/${boligmappaNumber}/files`,{
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Access-Control-Allow-Origin': '*',
+          }
+          })
+          .then(res =>{
+            const results =  res.data.response;
+            console.log(results);
+        });
+    }
+
     const [data, setData] = React.useState();
     const getdata =() =>{
         const token = window.localStorage.getItem('token');
@@ -128,12 +165,41 @@ export default function Documents(props) {
             autoComplete="off"
             border={0}
             padding={1}
+            marginTop={5}
             margin={2}
             >
-                <h4> Upload File</h4>
-            <input accept="image/*" id="contained-button-file" type="file"/>
-
+                    <Button variant="contained" component="span" onClick={handleClickOpen}>          
+                        <PhotoCamera />Upload File
+                    </Button>
             </Box>
+
+            <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+                <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                Upload File
+                </DialogTitle>
+                <DialogContent dividers>
+                <Box
+                    component="form"
+                    noValidate
+                    sx={{
+                    '& .MuiTextField-root': { m: 1, width: '90%' },
+                    }}
+                    autoComplete="off"
+                    padding={1}
+                    margin={2}
+                >
+                    <input accept="image/*" id="contained-button-file" type="file"/>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                <Button autoFocus onClick={uploadFile} color="primary" size="sm">
+                    Upload
+                </Button>
+                <Button autoFocus onClick={handleClose} color="primary" size="sm">
+                    Cancel
+                </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
