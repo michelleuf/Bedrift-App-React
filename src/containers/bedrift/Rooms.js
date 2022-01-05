@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import axios from 'axios';
 import { api } from "../../urlConfig.js";
+import PropTypes from 'prop-types';
 
 // @material-ui/core components
 import TableScrollbar from 'react-table-scrollbar';
@@ -11,6 +12,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import SearchIcon from '@material-ui/icons/Search';
+
 // core components
 import GridItem from "../../components/Dashboard/Grid/GridItem.js";
 import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
@@ -18,6 +24,8 @@ import Button from "../../components/Dashboard/CustomButtons/Button";
 
 export default function Rooms(props) {
     const boligmappaNumber = props.boligmappaNumber;
+    const [searchTerm, setSearchTerm] = useState(""); //for search bar
+
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
         setOpen(true);
@@ -87,6 +95,23 @@ export default function Rooms(props) {
                 
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
+                <div>
+                <FormControl fullWidth variant="outlined" size="small">
+                <OutlinedInput
+                    endAdornment={
+                    <InputAdornment position="end">
+                        <SearchIcon/>
+                    </InputAdornment>
+                    }
+                    onChange={(event)=>{
+                    setSearchTerm(event.target.value);
+                    }}
+                    placeholder="Search by title or room type "
+                    fontSize="small"
+                    size="sm"
+                />
+                </FormControl>
+            </div>
                 <TableScrollbar rows={20}>
                 <Table>
                 <TableHead>
@@ -102,7 +127,14 @@ export default function Rooms(props) {
                 </TableHead>
                 
                 <TableBody >
-                    {data && data.map((row,id) => {
+                    {data ? data.filter((row)=>{
+                    if (searchTerm === "") {
+                        return row
+                    } else if (row.title.toLowerCase().includes(searchTerm.toLowerCase()) || row.roomType.type.toLowerCase().includes(searchTerm.toLowerCase()) ) {
+                    return row
+                    }
+                    return null;
+                    }).map((row,id) => {
                     return(
                     <TableRow key={id}>
                         <TableCell align="left">
@@ -115,6 +147,12 @@ export default function Rooms(props) {
                     );
                     }
                     )
+                    : 
+                    <TableRow>
+                        <TableCell align="center" colSpan={2}>
+                        No records to show
+                        </TableCell>
+                    </TableRow>
                     }
                 </TableBody>
                 </Table>
@@ -171,3 +209,6 @@ export default function Rooms(props) {
         </div>
     )
 }
+Rooms.propTypes = {
+    boligmappaNumber: PropTypes.any,
+};

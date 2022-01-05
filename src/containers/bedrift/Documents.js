@@ -162,7 +162,7 @@ export default function Documents(props) {
                 </TableHead>
                 
                 <TableBody >
-                    {data && data.filter((row)=>{
+                    {data ? data.filter((row)=>{
                     if (searchTerm === "") {
                         return row
                     } else if (row.fileName.toLowerCase().includes(searchTerm.toLowerCase()) || row.title.toLowerCase().includes(searchTerm.toLowerCase()) ) {
@@ -197,6 +197,12 @@ export default function Documents(props) {
                     );
                     }
                     )
+                    : 
+                    <TableRow>
+                        <TableCell align="center" colSpan={6}>
+                        No records to show
+                        </TableCell>
+                    </TableRow>
                     }
                 </TableBody>
                 </Table>
