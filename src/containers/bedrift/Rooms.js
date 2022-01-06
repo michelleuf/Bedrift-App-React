@@ -44,7 +44,7 @@ export default function Rooms(props) {
     const [roomTypeId, setRoomTypeId] = React.useState(null);
     const [roomType, setRoomType] = React.useState("");
     const [description, setDescription] = React.useState("");
-    const [error, setError] = React.useState("");
+    const [error, setError] = React.useState("error");
     
     const notifyError = () => toast.info(`${error}`, {
         position: "top-right",

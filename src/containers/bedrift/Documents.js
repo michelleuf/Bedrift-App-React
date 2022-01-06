@@ -2,6 +2,8 @@ import React,{useState} from "react";
 import axios from 'axios';
 import { api } from "../../urlConfig.js";
 import PropTypes from 'prop-types';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // @material-ui/core components
 import TableScrollbar from 'react-table-scrollbar'
@@ -10,7 +12,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { Table,TableHead, TableBody, TableCell, TableRow } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
-import Box from '@material-ui/core/Box';
+import IconButton from '@mui/material/IconButton';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';import Box from '@material-ui/core/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -54,7 +57,26 @@ export default function Documents(props) {
     const [roomTypeId, setRoomTypeId] = React.useState(null);
     const [roomType, setRoomType] = React.useState("");
     const [roomDescription, setRoomDescription] = React.useState("");
-    const [error, setError] = React.useState("");
+    const [error, setError] = React.useState("error");
+
+    const notifyError = () => toast.info(`${error}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    const notifySucccess = () => toast.success(`File Created Successfully`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
 
     const uploadFile = () => {
         const token = window.localStorage.getItem('token');
@@ -100,9 +122,11 @@ export default function Documents(props) {
           .then(res =>{
             const results =  res.data.response;
             console.log(results);
+            notifySucccess();
         }).catch(error =>{
             console.log(error.response.data.message.en);
             setError(error.response.data.message.en);
+            notifyError();
           });
     }
 
@@ -338,10 +362,11 @@ export default function Documents(props) {
                         {row.uploadLink}
                         </TableCell>
                         <TableCell align="left">
-                            <Button onClick={()=>{
-                                // props.history.push(`/viewoneplant/${row.fileName}`);
-                                window.location.href = row.downloadLink;
-                            }} size="small" variant="outlined" color="primary">Download</Button>
+                            <IconButton 
+                                onClick={()=>{window.location.href = row.downloadLink;}} 
+                                size="small" variant="filled">
+                                <FileDownloadIcon/>
+                            </IconButton>
                         </TableCell>
                     </TableRow>
                     );
@@ -361,7 +386,6 @@ export default function Documents(props) {
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                 Upload File
-                <p style={{color: "red",fontSize:'12px'}}>{error}</p>
                 </DialogTitle>
                 <DialogContent dividers>
                     <Box
@@ -436,6 +460,16 @@ export default function Documents(props) {
                 </Button>
                 </DialogActions>
             </Dialog>
+            <ToastContainer position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+            /> 
         </div>
     )
 }
