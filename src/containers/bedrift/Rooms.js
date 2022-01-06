@@ -88,7 +88,6 @@ export default function Rooms(props) {
 
         // get room types
       const [roomTypes, setRoomTypes] = React.useState([]);
-      const [roomTypeError, setRoomTypeError] = React.useState("");
       const getRoomTypes =() =>{
           const token = window.localStorage.getItem('token');
           axios.get(`${api}types/roomTypes`,{
@@ -224,11 +223,11 @@ export default function Rooms(props) {
                         component="form"
                         noValidate
                         sx={{
-                        '& .MuiTextField-root': { m: 1, width: '90%' },
+                        '& .MuiTextField-root': { m: 1, width: '95%', padding: '5px' },
                         }}
                         autoComplete="on"
                         padding={1}
-                        margin={2}>
+                        marginTop={0}>
                              <Autocomplete
                                 disableClearable
                                 options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}

@@ -16,13 +16,14 @@ import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import SearchIcon from '@material-ui/icons/Search';
+
 // core components
 import GridItem from "../../components/Dashboard/Grid/GridItem.js";
 import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import Button from "../../components/Dashboard/CustomButtons/Button";
 
 export default function Projects(props) {
-    const boligmappaNumber = props.boligmappaNumber;
+    // const boligmappaNumber = props.boligmappaNumber;
     const [searchTerm, setSearchTerm] = useState(""); //for search bar
 
     const [open, setOpen] = useState(false);
@@ -32,17 +33,18 @@ export default function Projects(props) {
     const handleClose = () => {
         setOpen(false);
     }; 
-
+    //create project
     const [projectName, setprojectName] = React.useState(null);
     const [contactPersonName, setcontactPersonName] = React.useState("");
     const [contactEmailAddress, setcontactEmailAddress] = React.useState(null);
     const [contactNumber, setcontactNumber] = React.useState("");
     const [projectDescription, setprojectDescription] = React.useState("");
-    const [estimatedEndDate, setestimatedEndDate] = React.useState("");
+    const [estimatedEndDate, setestimatedEndDate] = React.useState(new Date());
+    const [error, setError] = React.useState("");
 
     const createProject =() =>{
         const token = window.localStorage.getItem('token');
-        axios.post(`${api}plants/projects`,
+        axios.post(`${api}projects`,
         {
             projectName : projectName,
             contactPersonName : contactPersonName,
@@ -60,25 +62,29 @@ export default function Projects(props) {
           .then(res =>{
             const results =  res.data.response;
             console.log(results);
-        });
+        }).catch(error =>{
+            console.log(error.response.data.message.en);
+            setError(error.response.data.message.en);
+          });;
       }
 
       //get Project details from api
-      const [data, setData] = React.useState();
-      const getdata =() =>{
-          const token = window.localStorage.getItem('token');
-          axios.get(`${api}plants/${boligmappaNumber}/projects`,{
-            headers: {
-              'Authorization': token ? `Bearer ${token}` : '',
-              'Access-Control-Allow-Origin': '*',
-            }
-            })
-            .then(res =>{
-              const results =  res.data.response;
-              console.log(results);
-              setData(results);               
-          });
-        }
+    //   const [data, setData] = React.useState();
+    //   const getdata =() =>{
+    //       const token = window.localStorage.getItem('token');
+    //       axios.get(`${api}plants/${boligmappaNumber}/projects`,{
+    //         headers: {
+    //           'Authorization': token ? `Bearer ${token}` : '',
+    //           'Access-Control-Allow-Origin': '*',
+    //         }
+    //         })
+    //         .then(res =>{
+    //           const results =  res.data.response;
+    //           console.log(results);
+    //           setData(results);               
+    //       });
+    //     }
+    const data = [];
       const Columns = [
         { id: 'status', label: 'status'},
         { id: 'projectNo', label: 'projectNo'},
@@ -90,9 +96,9 @@ export default function Projects(props) {
 
 
     ];
-    React.useEffect(()=>{
-        getdata();
-      },[]);
+    // React.useEffect(()=>{
+    //     getdata();
+    //   },[]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div>
@@ -101,6 +107,22 @@ export default function Projects(props) {
             
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
+                <Box
+                    component="form"
+                    noValidate
+                    sx={{
+                    '& .MuiTextField-root': { m: 1, width: '90%' },
+                    }}
+                    autoComplete="off"
+                    border={0}
+                    padding={1}
+                    margin={2}
+                    align={'right'}
+                    >
+                            <Button variant="contained" component="span" onClick={handleClickOpen}>          
+                                Create Project
+                            </Button>
+                </Box>
                 <div>
                     <FormControl fullWidth variant="outlined" size="small">
                     <OutlinedInput
@@ -178,45 +200,29 @@ export default function Projects(props) {
                 </Table>
             </TableScrollbar>
                 </GridItem>
-                <Box
-                    component="form"
-                    noValidate
-                    sx={{
-                    '& .MuiTextField-root': { m: 1, width: '90%' },
-                    }}
-                    autoComplete="off"
-                    border={0}
-                    padding={1}
-                    marginTop={5}
-                    margin={2}
-                    >
-                            <Button variant="contained" component="span" onClick={handleClickOpen}>          
-                                Create Project
-                            </Button>
-                </Box>
+                
         </GridContainer>
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                Upload File
+                Create Project
+                <p style={{color: "red",fontSize:'12px'}}>{error}</p>
                 </DialogTitle>
                 <DialogContent dividers>
                     <Box
                         component="form"
                         noValidate
                         sx={{
-                        '& .MuiTextField-root': { m: 1, width: '90%' },
+                        '& .MuiTextField-root': { m: 1, width: '95%', margin: '5px' },
                         }}
                         autoComplete="on"
                         padding={1}
-                        margin={2}>
-                        <input accept="image/*" id="contained-button-file" type="file"/>
+                        marginTop={0}>
                         <TextField id="outlined-size-small" label="projectName" fullWidth size="small"  onChange={(e)=>setprojectName(e.target.value)}/>
                         <TextField id="outlined-size-small" label="contactPersonName" fullWidth size="small" onChange={(e)=>setcontactPersonName(e.target.value)}/>
                         <TextField id="outlined-size-small" label="contactEmailAddress" fullWidth size="small" onChange={(e)=>setcontactEmailAddress(e.target.value)}/>
                         <TextField id="outlined-size-small" label="contactNumber" fullWidth size="small" onChange={(e)=>setcontactNumber(e.target.value)}/>
                         <TextField id="outlined-size-small" label="projectDescription" fullWidth size="small" onChange={(e)=>setprojectDescription(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="estimatedEndDate" fullWidth size="small" onChange={(e)=>setestimatedEndDate(e.target.value)}/>
-
+                        <input type="date" onChange={(e)=>setestimatedEndDate(e.target.value)} style={{width:"94%",height:"35px", margin:"5px"}}></input>
                     </Box>
                 </DialogContent>
                 <DialogActions>

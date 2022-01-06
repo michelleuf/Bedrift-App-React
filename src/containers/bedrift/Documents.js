@@ -337,11 +337,11 @@ export default function Documents(props) {
                         component="form"
                         noValidate
                         sx={{
-                        '& .MuiTextField-root': { m: 1, width: '90%', padding: '5px'},
+                        '& .MuiTextField-root': { m: 1, width: '95%', padding: '5px'},
                         }}
                         autoComplete="on"
-                        padding={1}
-                        margin={2}>
+                        padding={1}                        
+                        marginTop={0}>
                         <input accept="image/*" id="contained-button-file" type="file"/>
                         <TextField id="outlined-size-small" label="id" fullWidth size="small"  onChange={(e)=>setFileId(e.target.value)}/>
                         <TextField id="outlined-size-small" label="fileName" fullWidth size="small"  onChange={(e)=>setFileName(e.target.value)}/>
