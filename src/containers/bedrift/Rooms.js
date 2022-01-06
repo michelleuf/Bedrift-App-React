@@ -2,6 +2,8 @@ import React,{useState} from "react";
 import axios from 'axios';
 import { api } from "../../urlConfig.js";
 import PropTypes from 'prop-types';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // @material-ui/core components
 import TableScrollbar from 'react-table-scrollbar';
@@ -24,6 +26,8 @@ import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import Button from "../../components/Dashboard/CustomButtons/Button";
 
 export default function Rooms(props) {
+    
+
     const boligmappaNumber = props.boligmappaNumber;
     const [searchTerm, setSearchTerm] = useState(""); //for search bar
 
@@ -36,17 +40,35 @@ export default function Rooms(props) {
     }; 
 
     // create room
-    const [roomId, setRoomId] = React.useState(null);
     const [title, setTitle] = React.useState("");
     const [roomTypeId, setRoomTypeId] = React.useState(null);
     const [roomType, setRoomType] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [error, setError] = React.useState("");
+    
+    const notifyError = () => toast.info(`${error}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    const notifySucccess = () => toast.success(`Room Created Successfully`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+
     const createRoom =() =>{
         const token = window.localStorage.getItem('token');
         axios.post(`${api}plants/${boligmappaNumber}/rooms`,
         {
-            id : roomId,
             title : title,
             roomType : {
                 id : roomTypeId,
@@ -63,11 +85,15 @@ export default function Rooms(props) {
           .then(res =>{
             const results =  res.data.response;
             console.log(results);
+            notifySucccess();
+            handleClose();
         }).catch(error =>{
             console.log(error.response.data.message.en);
             setError(error.response.data.message.en);
+            notifyError();
           });
       }
+
 
       //get current room details from api
       const [data, setData] = React.useState();
@@ -215,8 +241,6 @@ export default function Rooms(props) {
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                 Create Room
-                <p style={{color: "red",fontSize:'12px'}}>{error}</p>
-
                 </DialogTitle>
                 <DialogContent dividers>
                     <Box
@@ -237,9 +261,7 @@ export default function Rooms(props) {
                                 size="small"
                                 onChange={(event, value) => handlechange(event, value)}
                             />
-                        <TextField id="outlined-size-small" label="Room Id" fullWidth size="small"  onChange={(e)=>setRoomId(e.target.value)}/>
                         <TextField id="outlined-size-small" label="title" fullWidth size="small" onChange={(e)=>setTitle(e.target.value)}/>
-
                         <TextField id="outlined-size-small" label="description" fullWidth size="small" onChange={(e)=>setDescription(e.target.value)}/>
                     </Box>
                 </DialogContent>
@@ -252,6 +274,16 @@ export default function Rooms(props) {
                 </Button>
                 </DialogActions>
             </Dialog>
+            <ToastContainer position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+            /> 
         </div>
     )
 }
