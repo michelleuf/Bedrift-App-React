@@ -327,8 +327,7 @@ export default function Documents(props) {
                     <TableRow>
                     {Columns.map((column) => (
                         <TableCell style={{color:'primary',backgroundColor: "white"}}
-                        key={column.id}
-                        >
+                        key={column.id}>
                         {column.label}
                         </TableCell>
                     ))}
@@ -357,9 +356,6 @@ export default function Documents(props) {
                         </TableCell>
                         <TableCell align="left">
                         {row.orderNumber}
-                        </TableCell>
-                        <TableCell align="left">
-                        {row.uploadLink}
                         </TableCell>
                         <TableCell align="left">
                             <IconButton 
