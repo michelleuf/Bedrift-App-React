@@ -193,7 +193,7 @@ export default function Documents(props) {
     });
 
     // get profession types
-  const [professiomTypes, setProfessiomTypes] = React.useState([]);
+  const [professionTypes, setProfessionTypes] = React.useState([]);
   const getProfessionTypes =() =>{
       const token = window.localStorage.getItem('token');
       axios.get(`${api}types/professionTypes`,{
@@ -205,7 +205,7 @@ export default function Documents(props) {
         .then(res =>{
           const results =  res.data.response;
           console.log(results);
-          setProfessiomTypes(results);               
+          setProfessionTypes(results);               
       }).catch(error =>{
         console.log(error);
       });
@@ -214,8 +214,39 @@ export default function Documents(props) {
         setProfessionTypeId(value.id);
         setProfessionTypeName(value.name);
     }
-    const optionsP = professiomTypes.map((option) => {
+    const optionsP = professionTypes.map((option) => {
         const firstLetter = option.name[0].toUpperCase();
+        return {
+            firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+            ...option,
+        };
+    });
+
+    // get chapter tag types
+  const [tagTypes, setTagTypes] = React.useState([]);
+  const getTagTypes =() =>{
+      const token = window.localStorage.getItem('token');
+      axios.get(`${api}types/chapterTags`,{
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+          'Access-Control-Allow-Origin': '*',
+        }
+        })
+        .then(res =>{
+          const results =  res.data.response;
+          console.log(results);
+          setTagTypes(results);               
+      }).catch(error =>{
+        console.log(error);
+      });
+    }
+    const handlechangeT = (event, value) => {
+        setTagId(value.id);
+        setChapterName(value.tagName);
+        setTagDescription(value.tagDescription);
+    }
+    const optionsT = tagTypes.map((option) => {
+        const firstLetter = option.tagName[0].toUpperCase();
         return {
             firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
             ...option,
@@ -228,7 +259,7 @@ export default function Documents(props) {
         getRoomTypes();
         getDocumentTypes();
         getProfessionTypes();
-
+        getTagTypes();
       },[]);  // eslint-disable-line react-hooks/exhaustive-deps
       
     return (
@@ -343,17 +374,23 @@ export default function Documents(props) {
                         padding={1}                        
                         marginTop={0}>
                         <input accept="image/*" id="contained-button-file" type="file"/>
-                        <TextField id="outlined-size-small" label="id" fullWidth size="small"  onChange={(e)=>setFileId(e.target.value)}/>
+                        <TextField id="outlined-size-small" type="number"  label="id" fullWidth size="small"  onChange={(e)=>setFileId(e.target.value)}/>
                         <TextField id="outlined-size-small" label="fileName" fullWidth size="small"  onChange={(e)=>setFileName(e.target.value)}/>
                         <TextField id="outlined-size-small" label="title" fullWidth size="small" onChange={(e)=>setTitle(e.target.value)}/>
                         <TextField id="outlined-size-small" label="description" fullWidth size="small" onChange={(e)=>setDescription(e.target.value)}/>
                         <TextField id="outlined-size-small" label="orderNumber" fullWidth size="small" onChange={(e)=>setOrderNumber(e.target.value)}/>
                         <TextField id="outlined-size-small" label="uploadLink" fullWidth size="small" onChange={(e)=>setUploadLink(e.target.value)}/>
                         <TextField id="outlined-size-small" label="downloadLink" fullWidth size="small" onChange={(e)=>setDownloadLink(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="tagId" fullWidth size="small" onChange={(e)=>setTagId(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="tagName" fullWidth size="small" onChange={(e)=>setChapterName(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="tagDescription" fullWidth size="small" onChange={(e)=>setTagDescription(e.target.value)}/>
                         <Autocomplete
+                                disableClearable
+                                options={optionsT.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                                groupBy={(option) => option.firstLetter}
+                                getOptionLabel={(option) => option.id + " - " + option.tagName}
+                                renderInput={(params) => <TextField {...params} label="Chapter Tag" required />}
+                                size="small"
+                                onChange={(event, value) => handlechangeT(event, value)}
+                        />
+                         <Autocomplete
                                 disableClearable
                                 options={optionsP.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                                 groupBy={(option) => option.firstLetter}
