@@ -16,6 +16,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import SearchIcon from '@material-ui/icons/Search';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 // core components
 import GridItem from "../../components/Dashboard/Grid/GridItem.js";
@@ -34,12 +35,13 @@ export default function Rooms(props) {
         setOpen(false);
     }; 
 
+    // create room
     const [roomId, setRoomId] = React.useState(null);
     const [title, setTitle] = React.useState("");
     const [roomTypeId, setRoomTypeId] = React.useState(null);
     const [roomType, setRoomType] = React.useState("");
     const [description, setDescription] = React.useState("");
-    
+    const [error, setError] = React.useState("");
     const createRoom =() =>{
         const token = window.localStorage.getItem('token');
         axios.post(`${api}plants/${boligmappaNumber}/rooms`,
@@ -61,10 +63,13 @@ export default function Rooms(props) {
           .then(res =>{
             const results =  res.data.response;
             console.log(results);
-        });
+        }).catch(error =>{
+            console.log(error.response.data.message.en);
+            setError(error.response.data.message.en);
+          });
       }
 
-      //get room details from api
+      //get current room details from api
       const [data, setData] = React.useState();
       const getdata =() =>{
           const token = window.localStorage.getItem('token');
@@ -80,13 +85,46 @@ export default function Rooms(props) {
               setData(results);               
           });
         }
+
+        // get room types
+      const [roomTypes, setRoomTypes] = React.useState([]);
+      const [roomTypeError, setRoomTypeError] = React.useState("");
+      const getRoomTypes =() =>{
+          const token = window.localStorage.getItem('token');
+          axios.get(`${api}types/roomTypes`,{
+            headers: {
+              'Authorization': token ? `Bearer ${token}` : '',
+              'Access-Control-Allow-Origin': '*',
+            }
+            })
+            .then(res =>{
+              const results =  res.data.response;
+              console.log(results);
+              setRoomTypes(results);               
+          }).catch(error =>{
+            console.log(error);
+          });
+        }
+    const handlechange = (event, value) => {
+        setRoomTypeId(value.id);
+        setRoomType(value.name);
+    }
+    const options = roomTypes.map((option) => {
+        const firstLetter = option.name[0].toUpperCase();
+        return {
+            firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+            ...option,
+        };
+    });
+
       const Columns = [
         { id: 'title', label: 'Room Name'},
         { id: 'roomType', label: 'roomType'},
     ];
     React.useEffect(()=>{
         getdata();
-      },[]);
+        getRoomTypes();
+      },[]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div>
@@ -95,6 +133,22 @@ export default function Rooms(props) {
                 
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
+                    <Box
+                        component="form"
+                        noValidate
+                        sx={{
+                        '& .MuiTextField-root': { m: 1, width: '90%' },
+                        }}
+                        autoComplete="off"
+                        border={0}
+                        padding={1}
+                        margin={2}
+                        align={'right'}
+                        >
+                                <Button variant="contained" component="span" onClick={handleClickOpen}>          
+                                    Create Room
+                                </Button>
+                    </Box>
                 <div>
                 <FormControl fullWidth variant="outlined" size="small">
                 <OutlinedInput
@@ -158,26 +212,12 @@ export default function Rooms(props) {
                 </Table>
             </TableScrollbar>
                 </GridItem>
-                <Box
-                    component="form"
-                    noValidate
-                    sx={{
-                    '& .MuiTextField-root': { m: 1, width: '90%' },
-                    }}
-                    autoComplete="off"
-                    border={0}
-                    padding={1}
-                    marginTop={5}
-                    margin={2}
-                    >
-                            <Button variant="contained" component="span" onClick={handleClickOpen}>          
-                                Create Room
-                            </Button>
-                </Box>
             </GridContainer>
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                Upload File
+                Create Room
+                <p style={{color: "red",fontSize:'12px'}}>{error}</p>
+
                 </DialogTitle>
                 <DialogContent dividers>
                     <Box
@@ -189,11 +229,18 @@ export default function Rooms(props) {
                         autoComplete="on"
                         padding={1}
                         margin={2}>
-                        <input accept="image/*" id="contained-button-file" type="file"/>
+                             <Autocomplete
+                                disableClearable
+                                options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                                groupBy={(option) => option.firstLetter}
+                                getOptionLabel={(option) => option.id + " - " + option.name}
+                                renderInput={(params) => <TextField {...params} label="Room Type" required />}
+                                size="small"
+                                onChange={(event, value) => handlechange(event, value)}
+                            />
                         <TextField id="outlined-size-small" label="Room Id" fullWidth size="small"  onChange={(e)=>setRoomId(e.target.value)}/>
                         <TextField id="outlined-size-small" label="title" fullWidth size="small" onChange={(e)=>setTitle(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="roomTypeId" fullWidth size="small" onChange={(e)=>setRoomTypeId(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="roomType" fullWidth size="small" onChange={(e)=>setRoomType(e.target.value)}/>
+
                         <TextField id="outlined-size-small" label="description" fullWidth size="small" onChange={(e)=>setDescription(e.target.value)}/>
                     </Box>
                 </DialogContent>
