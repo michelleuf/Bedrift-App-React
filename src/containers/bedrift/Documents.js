@@ -43,7 +43,6 @@ export default function Documents(props) {
     const [description, setDescription] = React.useState("");
     const [orderNumber, setOrderNumber] = React.useState("");
     const [checked, setChecked] = React.useState(true);
-    const [uploadLink, setUploadLink] = React.useState("");
     const [tagId, setTagId] = React.useState(null);
     const [tagName, setChapterName] = React.useState("");
     const [tagDescription, setTagDescription] = React.useState("");
@@ -108,7 +107,6 @@ export default function Documents(props) {
           .then(res =>{
             const results =  res.data.response;
             console.log(results);
-            setUploadLink(results.uploadLink);
             uploadFile(results.uploadLink);
         }).catch(error =>{
             console.log(error.response.data.message.en);
@@ -117,7 +115,6 @@ export default function Documents(props) {
           });
     }
     const uploadFile = (url) => {
-        const token = window.localStorage.getItem('token');
         console.log(url);
         axios.put(`${url}`,selectedImage, {
         headers: {

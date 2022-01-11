@@ -1,6 +1,8 @@
 import React,{useState} from "react";
 import axios from 'axios';
 import { api } from "../../urlConfig.js";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -24,10 +26,18 @@ export default function SearchProperty () {
     setOpen(false);
   };  
 
-
+  // get plant details by boligmappa number
   const [boligmappaNumber, setBoligmappaNumber] = useState();
   const [plantDetails, setPlantDetails] = useState([]);
-
+  const notifySearchError = (searchError) => toast.info(`${searchError}`, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
   const getPlantByBlogmappaNumber =(boligmappa_number) =>{
       const token = window.localStorage.getItem('token');
       axios.get(`${api}plants/${boligmappa_number}`,{
@@ -41,8 +51,40 @@ export default function SearchProperty () {
           console.log(results);
           setPlantDetails(results);
           setIsToggle(true);
+        }).catch(error =>{
+          console.log(error.response.data.message.en);
+          notifySearchError(error.response.data.message.en);
         });
     }
+
+  // create plant 
+  const notifyCreateError = (createError) => toast.info(`${createError}`, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
+  const createPlant =() =>{
+    const token = window.localStorage.getItem('token');
+    axios.post(`${api}plants`,{
+      boligmappaNumber : boligmappaNumber
+      },{
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+        'Access-Control-Allow-Origin': '*',
+      }
+      })
+    .then(res =>{
+      const results =  res.data.response;
+      console.log(results);
+    }).catch(error =>{
+      console.log(error.response.data.message.en);
+      notifyCreateError(error.response.data.message.en);
+    });
+}
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen} style={{float: 'right'}}>
@@ -117,6 +159,7 @@ export default function SearchProperty () {
                           {plantDetails.property.address? plantDetails.property.address.postalCode : null}&nbsp;
                           {plantDetails.property.address? plantDetails.property.address.postalPlace : null}</Typography>
                            
+                      <Button onClick={createPlant}>Create</Button>
                       </Box>)
                     : (plantDetails.type === 'building') &&
                       (<Box
@@ -139,8 +182,11 @@ export default function SearchProperty () {
                           {plantDetails.building.address? plantDetails.building.address.streetName : null}&nbsp;
                           {plantDetails.building.address? plantDetails.building.address.postalCode : null}&nbsp;
                           {plantDetails.building.address? plantDetails.building.address.postalPlace : null}</Typography>
+                          
+                      <Button onClick={createPlant}>hello</Button>
                       </Box>)
-                    )}
+                    )
+                  }
             </div>
           </Box>
           <Box
@@ -170,6 +216,16 @@ export default function SearchProperty () {
           </Button>
         </DialogActions>
       </Dialog>
+      <ToastContainer position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+            /> 
     </div>
   );
 }
