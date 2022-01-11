@@ -34,17 +34,16 @@ export default function Documents(props) {
     };
     const handleClose = () => {
         setOpen(false);
+        setFileName("");
     }; 
 
     //create document
-    const [fileId, setFileId] = React.useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
     const [fileName, setFileName] = React.useState("");
-    const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [orderNumber, setOrderNumber] = React.useState("");
     const [checked, setChecked] = React.useState(true);
     const [uploadLink, setUploadLink] = React.useState("");
-    const [downloadLink, setDownloadLink] = React.useState("");
     const [tagId, setTagId] = React.useState(null);
     const [tagName, setChapterName] = React.useState("");
     const [tagDescription, setTagDescription] = React.useState("");
@@ -78,23 +77,18 @@ export default function Documents(props) {
         progress: undefined,
         });
 
-    const uploadFile = () => {
+    const createDocument = () => {
         const token = window.localStorage.getItem('token');
         axios.post(`${api}plants/${boligmappaNumber}/files`,
         {
-            id : fileId,
             fileName : fileName,
-            title : title,
+            title : fileName,
             description : description,
             orderNumber : orderNumber,
             isVisibleInBoligmappa : checked,
-            uploadLink : uploadLink,
-            downloadLink : downloadLink,
-            chapterTags : {
-                id : tagId,
-                tagName : tagName,
-                tagDescription : tagDescription,
-            },
+            uploadLink : "",
+            downloadLink : "",
+            chapterTags : [],
             professionType : {
                 id : professionTypeId,
                 name : professionTypeName,
@@ -103,15 +97,7 @@ export default function Documents(props) {
                 id : documentTypeId,
                 name : documentTypeName,
             },
-            rooms : {
-                id : roomId,
-                title : roomTitle,
-                roomType : {
-                    id : roomTypeId,
-                    type : roomType,
-                },
-                description : roomDescription,
-            }
+            rooms : []
         },
         {
           headers: {
@@ -122,11 +108,27 @@ export default function Documents(props) {
           .then(res =>{
             const results =  res.data.response;
             console.log(results);
-            notifySucccess();
+            setUploadLink(results.uploadLink);
+            uploadFile();
+            setOpen(false);
         }).catch(error =>{
             console.log(error.response.data.message.en);
             setError(error.response.data.message.en);
             notifyError();
+          });
+    }
+    const uploadFile = () => {
+        const token = window.localStorage.getItem('token');
+        console.log(uploadLink);
+        axios.put(`${uploadLink}`,selectedImage, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+          }})
+        .then(res =>{
+            console.log("file uploaded successfully",res);
+            notifySucccess();
+        }).catch(error =>{
+            console.log("upload file error",error);
           });
     }
 
@@ -168,7 +170,7 @@ export default function Documents(props) {
           })
           .then(res =>{
             const results =  res.data.response;
-            console.log(results);
+            // console.log(results);
             setRoomTypes(results);               
         }).catch(error =>{
           console.log(error);
@@ -198,7 +200,7 @@ export default function Documents(props) {
         })
         .then(res =>{
           const results =  res.data.response;
-          console.log(results);
+        //   console.log(results);
           setDocumentTypes(results);               
       }).catch(error =>{
         console.log(error);
@@ -228,7 +230,7 @@ export default function Documents(props) {
         })
         .then(res =>{
           const results =  res.data.response;
-          console.log(results);
+        //   console.log(results);
           setProfessionTypes(results);               
       }).catch(error =>{
         console.log(error);
@@ -258,7 +260,7 @@ export default function Documents(props) {
         })
         .then(res =>{
           const results =  res.data.response;
-          console.log(results);
+        //   console.log(results);
           setTagTypes(results);               
       }).catch(error =>{
         console.log(error);
@@ -285,7 +287,7 @@ export default function Documents(props) {
         getProfessionTypes();
         getTagTypes();
       },[]);  // eslint-disable-line react-hooks/exhaustive-deps
-      
+    
     return (
         <div>
             <Box
@@ -393,14 +395,19 @@ export default function Documents(props) {
                         autoComplete="on"
                         padding={1}                        
                         marginTop={0}>
-                        <input accept="image/*" id="contained-button-file" type="file"/>
-                        <TextField id="outlined-size-small" type="number"  label="id" fullWidth size="small"  onChange={(e)=>setFileId(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="fileName" fullWidth size="small"  onChange={(e)=>setFileName(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="title" fullWidth size="small" onChange={(e)=>setTitle(e.target.value)}/>
+                        <input 
+                            accept="image/*" 
+                            id="contained-button-file" 
+                            type="file" 
+                            onChange={(event) => {
+                                // console.log(event.target.files[0]);
+                                setSelectedImage(event.target.files[0]);
+                                setFileName(event.target.files[0].name);
+                            }}
+                            />
+                        <TextField id="outlined-size-small" label="fileName" fullWidth size="small" value={selectedImage ? selectedImage.name : null} onChange={(e)=>setFileName(e.target.value)}/>
                         <TextField id="outlined-size-small" label="description" fullWidth size="small" onChange={(e)=>setDescription(e.target.value)}/>
                         <TextField id="outlined-size-small" label="orderNumber" fullWidth size="small" onChange={(e)=>setOrderNumber(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="uploadLink" fullWidth size="small" onChange={(e)=>setUploadLink(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="downloadLink" fullWidth size="small" onChange={(e)=>setDownloadLink(e.target.value)}/>
                         <Autocomplete
                                 disableClearable
                                 options={optionsT.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
@@ -448,7 +455,7 @@ export default function Documents(props) {
 
                 </DialogContent>
                 <DialogActions>
-                <Button autoFocus onClick={uploadFile} color="primary" size="sm">
+                <Button autoFocus onClick={createDocument} color="primary" size="sm">
                     Upload
                 </Button>
                 <Button autoFocus onClick={handleClose} color="primary" size="sm">
