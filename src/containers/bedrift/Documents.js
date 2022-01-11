@@ -109,24 +109,24 @@ export default function Documents(props) {
             const results =  res.data.response;
             console.log(results);
             setUploadLink(results.uploadLink);
-            uploadFile();
-            setOpen(false);
+            uploadFile(results.uploadLink);
         }).catch(error =>{
             console.log(error.response.data.message.en);
             setError(error.response.data.message.en);
             notifyError();
           });
     }
-    const uploadFile = () => {
+    const uploadFile = (url) => {
         const token = window.localStorage.getItem('token');
-        console.log(uploadLink);
-        axios.put(`${uploadLink}`,selectedImage, {
+        console.log(url);
+        axios.put(`${url}`,selectedImage, {
         headers: {
             'Content-Type': 'multipart/form-data'
           }})
         .then(res =>{
             console.log("file uploaded successfully",res);
             notifySucccess();
+            setOpen(false);
         }).catch(error =>{
             console.log("upload file error",error);
           });

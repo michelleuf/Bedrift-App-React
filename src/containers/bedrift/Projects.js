@@ -2,6 +2,8 @@ import React,{useState} from "react";
 import axios from 'axios';
 import { api } from "../../urlConfig.js";
 import PropTypes from 'prop-types';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // @material-ui/core components
 import TableScrollbar from 'react-table-scrollbar';
@@ -41,7 +43,24 @@ export default function Projects(props) {
     const [projectDescription, setprojectDescription] = React.useState("");
     const [estimatedEndDate, setestimatedEndDate] = React.useState(new Date());
     const [error, setError] = React.useState("");
-
+    const notifyError = () => toast.info(`${error}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    const notifySucccess = () => toast.success(`Room Created Successfully`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     const createProject =() =>{
         const token = window.localStorage.getItem('token');
         axios.post(`${api}projects`,
@@ -62,9 +81,12 @@ export default function Projects(props) {
           .then(res =>{
             const results =  res.data.response;
             console.log(results);
+            notifySucccess();
+            handleClose();
         }).catch(error =>{
             console.log(error.response.data.message.en);
             setError(error.response.data.message.en);
+            notifyError();
           });;
       }
 
@@ -205,7 +227,6 @@ export default function Projects(props) {
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                 Create Project
-                <p style={{color: "red",fontSize:'12px'}}>{error}</p>
                 </DialogTitle>
                 <DialogContent dividers>
                     <Box
@@ -234,6 +255,16 @@ export default function Projects(props) {
                 </Button>
                 </DialogActions>
             </Dialog>
+            <ToastContainer position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+            /> 
         </div>
     )
 }
