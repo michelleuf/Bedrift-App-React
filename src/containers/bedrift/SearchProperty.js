@@ -183,7 +183,7 @@ export default function SearchProperty () {
                           {plantDetails.building.address? plantDetails.building.address.postalCode : null}&nbsp;
                           {plantDetails.building.address? plantDetails.building.address.postalPlace : null}</Typography>
                           
-                      <Button onClick={createPlant}>hello</Button>
+                      <Button onClick={createPlant}>Create</Button>
                       </Box>)
                     )
                   }
