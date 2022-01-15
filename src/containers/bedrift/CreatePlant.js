@@ -21,7 +21,9 @@ export default function CreatePlant() {
             const results =  res.data.response;
             console.log(results);
             setData(results);
-          })
+          }).catch(error =>{
+            console.log(error.data);
+          });
       }
       
     return (
@@ -32,7 +34,7 @@ export default function CreatePlant() {
                 <button type="button" onClick={getdata}>submit</button>
             </form>
             
-            response iss : {data}
+            response iss : {data.plantId}
         </div>
     )
 }
