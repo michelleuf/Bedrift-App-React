@@ -15,7 +15,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import GridItem from "../../components/Dashboard/Grid/GridItem.js";
 import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import CustomTabs from "../../components/Dashboard/CustomTabs/CustomTabs.js";
-import SearchProperty from "./SearchProperty.js";
+// import SearchProperty from "./SearchProperty.js";
+import SearchComponent from '@boligmappa/web-component-search';
 
 export default function Plants() {
   const [searchTerm, setSearchTerm] = useState(""); //for search function
@@ -80,7 +81,8 @@ export default function Plants() {
     
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        <SearchProperty/>
+        {/* <SearchProperty/> */}
+        {/* <SearchComponent development="true"/> */}
       </GridItem>
       <GridItem xs={12} sm={12} md={12}>
         <CustomTabs
