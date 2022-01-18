@@ -38,3 +38,49 @@ export default function CreatePlant() {
         </div>
     )
 }
+
+
+// //bolig search component
+// const token = window.localStorage.getItem('token');
+//   let config = {
+//     idObject: '{"userId": "michelleF"}',
+//     integrationPartnerHandlesTokens: true,
+//     pageSizes: {
+//       streets: 10,
+//       buildings: 10,
+//       projects: 10
+//     },
+//     access_token : token
+//   };
+//   //custom event listener
+// React.useEffect(()=>{
+//   window.addEventListener('property-confirmed', (e) => {
+//     setBoligmappaNumber(e.detail.selectedProperties.properties[0].boligmappaNumber);
+//     createPlant();
+//     // console.log(e);
+//   })
+// },[]);  // eslint-disable-line react-hooks/exhaustive-deps
+
+
+{/* <Box
+             component="form"
+             noValidate
+             sx={{
+               '& .MuiTextField-root': { m: 1, width: '90%' },
+             }}
+             autoComplete="off"
+             border={1}
+             padding={2}
+             margin={2}
+             width="auto"
+          >
+            <b>Search for property with Addresses/Cadastral records/project</b>
+            <br/>
+            <br/>
+            <boligmappa-search 
+              development="true" 
+              config={JSON.stringify(config)} 
+            ></boligmappa-search>
+            <br/>
+            <br/>
+          </Box> */}
