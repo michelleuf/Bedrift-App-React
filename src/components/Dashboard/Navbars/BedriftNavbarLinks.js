@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import { useHistory } from 'react-router-dom';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -26,6 +27,8 @@ const useStyles = makeStyles(styles);
 
 
 export default function AdminNavbarLinks() {
+  const history = useHistory();
+
   const classes = useStyles();
   const [openProfile, setOpenProfile] = React.useState(null);
   
@@ -42,7 +45,12 @@ export default function AdminNavbarLinks() {
 
   const Logout= ()=> {
     localStorage.clear();
-    window.location.href = '/';
+    document.cookie.split(';').forEach(function(c) {
+      document.cookie = c.trim().split('=')[0] + '=;' + 'expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+    });
+    // window.location.href = '/';
+    history.push("/");
+
   }
   
   return (
