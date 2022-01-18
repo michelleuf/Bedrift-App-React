@@ -15,8 +15,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import GridItem from "../../components/Dashboard/Grid/GridItem.js";
 import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import CustomTabs from "../../components/Dashboard/CustomTabs/CustomTabs.js";
-// import SearchProperty from "./SearchProperty.js";
-import '@boligmappa/web-components';
+import SearchProperty from "./SearchProperty.js";
 
 export default function Plants() {
   const [searchTerm, setSearchTerm] = useState(""); //for search function
@@ -62,7 +61,6 @@ export default function Plants() {
     { id: 'plantid', label: 'Plant Id'},
     { id: 'createdDate', label: 'Created Date'},
     { id: 'unitNumber', label: 'Unit Number'},
-    { id: 'share', label: 'Organization Number & Share Number'},
     { id: 'address', label: 'Address'},
     { id: 'boligmappaNumber', label: 'Housing Folder Number'},
     { id: 'view', label: 'View'},
@@ -78,28 +76,11 @@ export default function Plants() {
 
   ]
 
-  const token = window.localStorage.getItem('token');
-  let config = {
-    idObject: '{"userId": "kasung"}',
-    // retrieveTokenEndpoint: {
-    //   endpointUrl: 'http://localhost:4000/retrieve-token',
-    //   method: 'POST',
-    // },
-    integrationPartnerHandlesTokens: true,
-    pageSizes: {
-      streets: 10,
-      buildings: 10,
-      projects: 10
-    },
-    access_token : token
-  };
-
   return (
     
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        {/* <SearchProperty/> */}
-        <boligmappa-search development="true" config={JSON.stringify(config)}></boligmappa-search>
+        <SearchProperty/>
       </GridItem>
       <GridItem xs={12} sm={12} md={12}>
         <CustomTabs
@@ -161,10 +142,10 @@ export default function Plants() {
                               <TableCell align="left">
                                 {row.property.unitNumber}
                               </TableCell>
-                              <TableCell align="left">
+                              {/* <TableCell align="left">
                                 {row.property.share? row.property.share.organizationNumber + " - ": null }&nbsp;
                                 {row.property.share? row.property.share.shareNumber : null}  
-                              </TableCell>
+                              </TableCell> */}
                               <TableCell align="left">
                                 {row.property.address? row.property.address.houseNumber : null}&nbsp; 
                                 {row.property.address? row.property.address.houseSubNumber : null} &nbsp; 
