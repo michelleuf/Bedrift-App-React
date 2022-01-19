@@ -59,7 +59,7 @@ export default function SearchProperty () {
       notifyCreateSuccess();
       handleClose();
     }).catch(error =>{
-      console.log("pland not created becouse",error.response.data.message.en);
+      console.log("plant not created because",error.response.data.message.en);
       notifyCreateError(error.response.data.message.en);
     });
 }
@@ -85,7 +85,7 @@ React.useEffect(()=>{
     const b = (result.building ? result.building.boligmappaNumber : result.properties[0].boligmappaNumber);
     createPlant(b);
   })
-},['property-confirmed']);  // eslint-disable-line react-hooks/exhaustive-deps
+},[]);  // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (
