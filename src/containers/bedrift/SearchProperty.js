@@ -98,13 +98,16 @@ React.useEffect(()=>{
         Search for property with Addresses/Cadastral records/project
         </DialogTitle>
         <DialogContent dividers>
-            <br/>
+          <div style={{height:"300px"}}>
+          <br/>
             <boligmappa-search 
               development="true" 
               config={JSON.stringify(config)} 
             ></boligmappa-search>
           <br/>
             <br/>
+          </div>
+            
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose} color="primary" size="sm">
