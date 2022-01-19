@@ -11,7 +11,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 
 import Button from "../../components/Dashboard/CustomButtons/Button";
-import { height } from "@mui/system";
 
 export default function SearchProperty () {
   const [open, setOpen] = useState(false);
@@ -42,11 +41,13 @@ export default function SearchProperty () {
   
 
   // create plant 
-  const createPlant =(bN) =>{
+  const [boligmappaNumber, setBoligmappaNumber] = useState("");
+
+  const createPlant =() =>{
     const token = window.localStorage.getItem('token');
-    console.log("current value of boligmappa number :",bN);
+    console.log("current value of boligmappa number :",boligmappaNumber);
     axios.post(`${api}plants`,{
-      boligmappaNumber : bN
+      boligmappaNumber : boligmappaNumber
       },{
       headers: {
         'Authorization': token ? `Bearer ${token}` : '',
@@ -79,13 +80,14 @@ const token = window.localStorage.getItem('token');
   };
   //custom event listener
 React.useEffect(()=>{
-  window.addEventListener('property-confirmed', (e) => {
+  window.addEventListener('property-confirmed', async(e) => {
     // console.log(e);
     const result = e.detail.selectedProperties;
     const b = (result.building ? result.building.boligmappaNumber : result.properties[0].boligmappaNumber);
-    createPlant(b);
+    await setBoligmappaNumber(b);
+    createPlant();
   })
-},[]);  // eslint-disable-line react-hooks/exhaustive-deps
+},[boligmappaNumber]);  // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (
@@ -102,7 +104,7 @@ React.useEffect(()=>{
           <br/>
             <boligmappa-search 
               development="true" 
-              config={JSON.stringify(config)} 
+              config={JSON.stringify(config)}
             ></boligmappa-search>
           <br/>
             <br/>
