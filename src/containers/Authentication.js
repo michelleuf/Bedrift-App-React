@@ -39,6 +39,8 @@ export default function Authentication() {
           const data1 = await response.json();
           console.log('respose data ?',data1);
           localStorage.setItem('token', data1['access_token'])
+          localStorage.setItem('refresh_token', data1['refresh_token'])
+          localStorage.setItem('expires_in', data1['expires_in'])
           setTokenHandle(true);
         } catch (error) {
           console.log('error happened here!!!!')
