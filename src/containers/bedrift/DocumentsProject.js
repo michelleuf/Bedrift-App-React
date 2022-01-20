@@ -42,7 +42,7 @@ export default function DocumentsProject(props) {
     const [fileName, setFileName] = React.useState("");
     const [title, setTitle] = React.useState("");
     const [checked, setChecked] = React.useState(true);
-    const [tagId, setTagId] = React.useState([]);
+    const [tagData, setTagData] = React.useState([]);
     const [professionTypeId, setProfessionTypeId] = React.useState(null);
     const [documentTypeId, setDocumentTypeId] = React.useState(null);
 
@@ -77,7 +77,7 @@ export default function DocumentsProject(props) {
             professionType : {
                 id : professionTypeId,
             },
-            chapterTags : [],
+            chapterTags : tagData,
             sendToLinkedBoligmapper : checked,
         },
         {
@@ -194,35 +194,28 @@ export default function DocumentsProject(props) {
         };
     });
 
-    // get chapter tag types
-  const [tagTypes, setTagTypes] = React.useState([]);
-  const getTagTypes =() =>{
-      const token = window.localStorage.getItem('token');
-      axios.get(`${api}types/chapterTags`,{
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-          'Access-Control-Allow-Origin': '*',
-        }
-        })
-        .then(res =>{
-          const results =  res.data.response;
-        //   console.log(results);
-          setTagTypes(results);               
-      }).catch(error =>{
-        console.log(error);
-      });
-    }
-    const handlechangeT = (event, value) => {
-        setTagId(value.id);
-    }
-    const optionsT = tagTypes.map((option) => {
-        const firstLetter = option.tagName[0].toUpperCase();
-        return {
-            firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-            ...option,
-        };
-    });
-      
+   // get chapter tag types
+   const [tagTypes, setTagTypes] = React.useState([]);
+   const getTagTypes =() =>{
+       const token = window.localStorage.getItem('token');
+       axios.get(`${api}types/chapterTags`,{
+         headers: {
+           'Authorization': token ? `Bearer ${token}` : '',
+           'Access-Control-Allow-Origin': '*',
+         }
+         })
+         .then(res =>{
+           const results =  res.data.response;
+         //   console.log(results);
+           setTagTypes(results);               
+       }).catch(error =>{
+         console.log(error);
+       });
+     }
+     const handlechangeT = (event, value) => {
+         setTagData(value);
+        //  console.log(tagData);
+     }
     
     React.useEffect(()=>{
         getdata();
@@ -357,14 +350,17 @@ export default function DocumentsProject(props) {
                         <TextField id="outlined-size-small" label="fileName" fullWidth size="small" value={selectedImage ? selectedImage.name : null} onChange={(e)=>setFileName(e.target.value)}/>
                         <TextField id="outlined-size-small" label="title" fullWidth size="small" onChange={(e)=>setTitle(e.target.value)}/>
                         <Autocomplete
-                                disableClearable
-                                options={optionsT.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
-                                groupBy={(option) => option.firstLetter}
-                                getOptionLabel={(option) => option.id + " - " + option.tagName}
-                                renderInput={(params) => <TextField {...params} label="Chapter Tag" required />}
-                                size="small"
-                                onChange={(event, value) => handlechangeT(event, value)}
-                        />
+                            multiple
+                            value={tagData}
+                            disableClearable
+                            options={tagTypes}
+                            filterSelectedOptions
+                            groupBy={(option) => option.firstLetter}
+                            getOptionLabel={(option) => option.id + " - " + option.tagName}
+                            renderInput={(params) => <TextField {...params} label="Chapter Tag" required />}
+                            size="small"
+                            onChange={(event, value) => handlechangeT(event, value)}
+                            />
                          <Autocomplete
                                 disableClearable
                                 options={optionsP.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
