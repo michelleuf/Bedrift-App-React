@@ -55,9 +55,8 @@ export default function Documents(props) {
     const [roomTypeId, setRoomTypeId] = React.useState(null);
     const [roomType, setRoomType] = React.useState("");
     const [roomDescription, setRoomDescription] = React.useState("");
-    const [error, setError] = React.useState("error");
 
-    const notifyError = () => toast.info(`${error}`, {
+    const notifyError = (err) => toast.info(err, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -110,8 +109,7 @@ export default function Documents(props) {
             uploadFile(results.uploadLink);
         }).catch(error =>{
             console.log(error.response.data.message.en);
-            setError(error.response.data.message.en);
-            notifyError();
+            notifyError(error.response.data.message.en);
           });
     }
     const uploadFile = (url) => {
