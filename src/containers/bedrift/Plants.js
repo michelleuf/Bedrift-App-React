@@ -26,7 +26,7 @@ export default function Plants() {
  
   const getdata =() =>{
     const token = window.localStorage.getItem('token');
-    axios.get(`${api}plants`,{
+    axios.get(`${api}plants?page=2&pageSize=20`,{
       headers: {
         'Authorization': token ? `Bearer ${token}` : '',
         'Access-Control-Allow-Origin': '*',
@@ -34,7 +34,7 @@ export default function Plants() {
       })
       .then(res =>{
         const results =  res.data.response;
-        // console.log(results);
+        console.log(results);
         if (results.length === 0) {
           alert("No plants available");
         }

@@ -67,7 +67,7 @@ export default function SearchProperty () {
 //bolig search component
 const token = window.localStorage.getItem('token');
   let config = {
-    idObject: '{"userId": "michelleF"}',
+    idObject: '{"userId": "michellef@99x.io"}',
     integrationPartnerHandlesTokens: true,
     pageSizes: {
       streets: 10,
@@ -79,7 +79,7 @@ const token = window.localStorage.getItem('token');
   };
   //custom event listener
 React.useEffect(()=>{
-  window.addEventListener('property-confirmed', async(e) => {
+  window.addEventListener('property-confirmed', (e) => {
     // console.log(e);
     const result = e.detail.selectedProperties;
     const b = (result.building ? result.building.boligmappaNumber : result.properties[0].boligmappaNumber);
