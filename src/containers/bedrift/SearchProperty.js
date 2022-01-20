@@ -41,13 +41,12 @@ export default function SearchProperty () {
   
 
   // create plant 
-  const [boligmappaNumber, setBoligmappaNumber] = useState("");
 
-  const createPlant =() =>{
+  const createPlant =(bn) =>{
     const token = window.localStorage.getItem('token');
-    console.log("current value of boligmappa number :",boligmappaNumber);
+    console.log("current value of boligmappa number :",bn);
     axios.post(`${api}plants`,{
-      boligmappaNumber : boligmappaNumber
+      boligmappaNumber : bn
       },{
       headers: {
         'Authorization': token ? `Bearer ${token}` : '',
@@ -84,10 +83,9 @@ React.useEffect(()=>{
     // console.log(e);
     const result = e.detail.selectedProperties;
     const b = (result.building ? result.building.boligmappaNumber : result.properties[0].boligmappaNumber);
-    await setBoligmappaNumber(b);
-    createPlant();
+    createPlant(b);
   })
-},[boligmappaNumber]);  // eslint-disable-line react-hooks/exhaustive-deps
+},[]);  // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (
