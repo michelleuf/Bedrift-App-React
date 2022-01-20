@@ -1,5 +1,6 @@
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import Plants from "../Plants";
 import ViewOnePlant from "../ViewOnePlant";
@@ -32,7 +33,7 @@ const dashboardRoutes = [
   {
     path: "/viewoneproject",
     name: "Upload File to Project",
-    icon: Inventory2Icon,
+    icon: UploadFileIcon,
     component: ViewOneProject,
     layout: "/bedrift",
   },
