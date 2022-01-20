@@ -4,7 +4,8 @@ import { api } from "../../urlConfig.js";
 import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css";
 // @material-ui/core components
 import TableScrollbar from 'react-table-scrollbar';
 import { Table,TableHead, TableBody, TableCell, TableRow } from "@material-ui/core";
@@ -41,9 +42,8 @@ export default function Projects(props) {
     const [contactEmailAddress, setcontactEmailAddress] = React.useState(null);
     const [contactNumber, setcontactNumber] = React.useState("");
     const [projectDescription, setprojectDescription] = React.useState("");
-    const [estimatedEndDate, setestimatedEndDate] = React.useState(new Date());
-    const [error, setError] = React.useState("");
-    const notifyError = () => toast.info(`${error}`, {
+    const [estimatedEndDate, setEstimatedEndDate] = React.useState(new Date());
+    const notifyError = (err) => toast.info(err, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -52,7 +52,7 @@ export default function Projects(props) {
         draggable: true,
         progress: undefined,
         });
-    const notifySucccess = () => toast.success(`Room Created Successfully`, {
+    const notifySucccess = () => toast.success(`Project Created Successfully`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -85,8 +85,7 @@ export default function Projects(props) {
             handleClose();
         }).catch(error =>{
             console.log(error.response.data.message.en);
-            setError(error.response.data.message.en);
-            notifyError();
+            notifyError(error.response.data.message.en);
           });;
       }
 
@@ -243,12 +242,13 @@ export default function Projects(props) {
                         <TextField id="outlined-size-small" label="contactEmailAddress" fullWidth size="small" onChange={(e)=>setcontactEmailAddress(e.target.value)}/>
                         <TextField id="outlined-size-small" label="contactNumber" fullWidth size="small" onChange={(e)=>setcontactNumber(e.target.value)}/>
                         <TextField id="outlined-size-small" label="projectDescription" fullWidth size="small" onChange={(e)=>setprojectDescription(e.target.value)}/>
-                        <input type="date" onChange={(e)=>setestimatedEndDate(e.target.value)} style={{width:"94%",height:"35px", margin:"5px"}}></input>
+                        <DatePicker  selected={estimatedEndDate} onChange={date => setEstimatedEndDate(date)}/>
+                        {/* <input type="date" onChange={(e)=>setEstimatedEndDate(e.target.value)} style={{width:"94%",height:"35px", margin:"5px"}}></input> */}
                     </Box>
                 </DialogContent>
                 <DialogActions>
                 <Button autoFocus onClick={createProject} color="primary" size="sm">
-                    Upload
+                    Create
                 </Button>
                 <Button autoFocus onClick={handleClose} color="primary" size="sm">
                     Cancel
