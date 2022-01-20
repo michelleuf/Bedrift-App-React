@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-key */
 import React from "react";
-import PropTypes from 'prop-types';
 
 // core components
 import GridItem from "../../components/Dashboard/Grid/GridItem.js";

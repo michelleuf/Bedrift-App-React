@@ -252,7 +252,7 @@ export default function Documents(props) {
     }
     const handlechangeT = (event, value) => {
         setTagData(value);
-        console.log(tagData);
+        // console.log(tagData);
     }
       
     React.useEffect(()=>{
