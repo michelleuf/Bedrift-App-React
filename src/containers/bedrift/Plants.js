@@ -157,7 +157,7 @@ export default function Plants() {
                                 {row.boligmappaNumber}
                               </TableCell>
                               <TableCell align="left">
-                                <Link to={{pathname: "/bedrift/viewoneplant", state: row.boligmappaNumber}}>View</Link>
+                                <Link to={{pathname: "/bedrift/viewoneplant", state: row.boligmappaNumber}} style={{ textDecoration: 'none' }}>View >></Link>
                               </TableCell>
                             </TableRow>
                             );
@@ -238,7 +238,7 @@ export default function Plants() {
                                 {row.boligmappaNumber}
                               </TableCell>
                               <TableCell align="left">
-                                <Link to={{pathname: "/bedrift/viewoneplant", state: row.boligmappaNumber}}>View</Link>
+                                <Link to={{pathname: "/bedrift/viewoneplant", state: row.boligmappaNumber}} style={{ textDecoration: 'none' }}>View >></Link>
                               </TableCell>
                             </TableRow>
                             );
