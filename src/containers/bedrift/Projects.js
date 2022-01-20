@@ -26,7 +26,7 @@ import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import Button from "../../components/Dashboard/CustomButtons/Button";
 
 export default function Projects(props) {
-    // const boligmappaNumber = props.boligmappaNumber;
+    const boligmappaNumber = props.boligmappaNumber;
     const [searchTerm, setSearchTerm] = useState(""); //for search bar
 
     const [open, setOpen] = useState(false);
@@ -90,22 +90,23 @@ export default function Projects(props) {
       }
 
       //get Project details from api
-    //   const [data, setData] = React.useState();
-    //   const getdata =() =>{
-    //       const token = window.localStorage.getItem('token');
-    //       axios.get(`${api}plants/${boligmappaNumber}/projects`,{
-    //         headers: {
-    //           'Authorization': token ? `Bearer ${token}` : '',
-    //           'Access-Control-Allow-Origin': '*',
-    //         }
-    //         })
-    //         .then(res =>{
-    //           const results =  res.data.response;
-    //           console.log(results);
-    //           setData(results);               
-    //       });
-    //     }
-    const data = [];
+      const [data, setData] = React.useState();
+      const getdata =() =>{
+          const token = window.localStorage.getItem('token');
+          axios.get(`${api}plants/${boligmappaNumber}/projects`,{
+            headers: {
+              'Authorization': token ? `Bearer ${token}` : '',
+              'Access-Control-Allow-Origin': '*',
+            }
+            })
+            .then(res =>{
+              const results =  res.data.response;
+              console.log(results);
+              setData(results);               
+          });
+        }
+        
+    // const data = [];
       const Columns = [
         { id: 'status', label: 'status'},
         { id: 'projectNo', label: 'projectNo'},
