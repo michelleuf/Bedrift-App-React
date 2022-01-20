@@ -35,6 +35,8 @@ export default function Documents(props) {
     const handleClose = () => {
         setOpen(false);
         setFileName("");
+        setRoomData([]);
+        setTagData([]);
     }; 
 
     //create document
@@ -43,18 +45,12 @@ export default function Documents(props) {
     const [description, setDescription] = React.useState("");
     const [orderNumber, setOrderNumber] = React.useState("");
     const [checked, setChecked] = React.useState(true);
-    const [tagId, setTagId] = React.useState(null);
-    const [tagName, setChapterName] = React.useState("");
-    const [tagDescription, setTagDescription] = React.useState("");
     const [professionTypeId, setProfessionTypeId] = React.useState(null);
     const [professionTypeName, setProfessionTypeName] = React.useState("");
     const [documentTypeId, setDocumentTypeId] = React.useState(null);
     const [documentTypeName, setDocumentTypeName] = React.useState("");
-    const [roomId, setRoomId] = React.useState(null);
-    const [roomTitle, setRoomTitle] = React.useState("");
-    const [roomTypeId, setRoomTypeId] = React.useState(null);
-    const [roomType, setRoomType] = React.useState("");
-    const [roomDescription, setRoomDescription] = React.useState("");
+    const [roomData, setRoomData] = React.useState([]);
+    const [tagData, setTagData] = React.useState([]);
 
     const notifyError = (err) => toast.info(err, {
         position: "top-right",
@@ -84,9 +80,7 @@ export default function Documents(props) {
             description : description,
             orderNumber : orderNumber,
             isVisibleInBoligmappa : checked,
-            uploadLink : "",
-            downloadLink : "",
-            chapterTags : [],
+            chapterTags : tagData,
             professionType : {
                 id : professionTypeId,
                 name : professionTypeName,
@@ -95,7 +89,7 @@ export default function Documents(props) {
                 id : documentTypeId,
                 name : documentTypeName,
             },
-            rooms : []
+            rooms : roomData
         },
         {
           headers: {
@@ -122,6 +116,7 @@ export default function Documents(props) {
             console.log("file uploaded successfully",res);
             notifySucccess();
             setOpen(false);
+            handleClose();
         }).catch(error =>{
             console.log("upload file error",error);
           });
@@ -139,7 +134,7 @@ export default function Documents(props) {
           })
           .then(res =>{
             const results =  res.data.response;
-            console.log(results);
+            // console.log(results);
             setData(results);               
         });
       }
@@ -153,11 +148,11 @@ export default function Documents(props) {
     ];
 
 
-    // get room types
+    // get available rooms for this boligmappa number
     const [roomTypes, setRoomTypes] = React.useState([]);
     const getRoomTypes =() =>{
         const token = window.localStorage.getItem('token');
-        axios.get(`${api}types/roomTypes`,{
+        axios.get(`${api}plants/${boligmappaNumber}/rooms `,{
           headers: {
             'Authorization': token ? `Bearer ${token}` : '',
             'Access-Control-Allow-Origin': '*',
@@ -172,16 +167,9 @@ export default function Documents(props) {
         });
       }
   const handlechangeR = (event, value) => {
-      setRoomTypeId(value.id);
-      setRoomType(value.name);
+    setRoomData(value);
+    // console.log(roomData);
   }
-  const optionsR = roomTypes.map((option) => {
-      const firstLetter = option.name[0].toUpperCase();
-      return {
-          firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-          ...option,
-      };
-  });
 
   // get document types
   const [documentTypes, setDocumentTypes] = React.useState([]);
@@ -262,19 +250,10 @@ export default function Documents(props) {
       });
     }
     const handlechangeT = (event, value) => {
-        setTagId(value.id);
-        setChapterName(value.tagName);
-        setTagDescription(value.tagDescription);
+        setTagData(value);
+        console.log(tagData);
     }
-    const optionsT = tagTypes.map((option) => {
-        const firstLetter = option.tagName[0].toUpperCase();
-        return {
-            firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-            ...option,
-        };
-    });
       
-    
     React.useEffect(()=>{
         getdata();
         getRoomTypes();
@@ -403,21 +382,12 @@ export default function Documents(props) {
                         <TextField id="outlined-size-small" label="fileName" fullWidth size="small" value={selectedImage ? selectedImage.name : null} onChange={(e)=>setFileName(e.target.value)}/>
                         <TextField id="outlined-size-small" label="description" fullWidth size="small" onChange={(e)=>setDescription(e.target.value)}/>
                         <TextField id="outlined-size-small" label="orderNumber" fullWidth size="small" onChange={(e)=>setOrderNumber(e.target.value)}/>
-                        <Autocomplete
-                                disableClearable
-                                options={optionsT.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
-                                groupBy={(option) => option.firstLetter}
-                                getOptionLabel={(option) => option.id + " - " + option.tagName}
-                                renderInput={(params) => <TextField {...params} label="Chapter Tag" required />}
-                                size="small"
-                                onChange={(event, value) => handlechangeT(event, value)}
-                        />
                          <Autocomplete
                                 disableClearable
                                 options={optionsP.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                                 groupBy={(option) => option.firstLetter}
                                 getOptionLabel={(option) => option.id + " - " + option.name}
-                                renderInput={(params) => <TextField {...params} label="Profession Type" required />}
+                                renderInput={(params) => <TextField {...params} label="Industry / subject" required />}
                                 size="small"
                                 onChange={(event, value) => handlechangeP(event, value)}
                             />
@@ -430,22 +400,33 @@ export default function Documents(props) {
                                 size="small"
                                 onChange={(event, value) => handlechangeD(event, value)}
                             />
-                        <TextField id="outlined-size-small" label="roomId" fullWidth size="small" onChange={(e)=>setRoomId(e.target.value)}/>
-                        <TextField id="outlined-size-small" label="roomTitle" fullWidth size="small" onChange={(e)=>setRoomTitle(e.target.value)}/>
                         <Autocomplete
+                                multiple
+                                value={roomData}
                                 disableClearable
-                                options={optionsR.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                                options={roomTypes}
+                                filterSelectedOptions
                                 groupBy={(option) => option.firstLetter}
-                                getOptionLabel={(option) => option.id + " - " + option.name}
-                                renderInput={(params) => <TextField {...params} label="Room Type" required />}
+                                getOptionLabel={(option) => option.id + " - " + option.title}
+                                renderInput={(params) => <TextField {...params} label="Rooms" required />}
                                 size="small"
                                 onChange={(event, value) => handlechangeR(event, value)}
                             />
-                        <TextField id="outlined-size-small" label="roomDescription" fullWidth size="small" onChange={(e)=>setRoomDescription(e.target.value)}/>
-
+                        <Autocomplete
+                            multiple
+                            value={tagData}
+                            disableClearable
+                            options={tagTypes}
+                            filterSelectedOptions
+                            groupBy={(option) => option.firstLetter}
+                            getOptionLabel={(option) => option.id + " - " + option.tagName}
+                            renderInput={(params) => <TextField {...params} label="Chapter Tag" required />}
+                            size="small"
+                            onChange={(event, value) => handlechangeT(event, value)}
+                            />
                         <br/>
                             <input type="checkbox" defaultChecked={checked} onChange={() => setChecked(!checked)} />
-                            Show in Boligmap
+                            Show in Boligmappa
                     </Box>
 
                 </DialogContent>

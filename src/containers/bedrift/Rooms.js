@@ -271,7 +271,7 @@ export default function Rooms(props) {
                 </DialogContent>
                 <DialogActions>
                 <Button autoFocus onClick={createRoom} color="primary" size="sm">
-                    Upload
+                    Create
                 </Button>
                 <Button autoFocus onClick={handleClose} color="primary" size="sm">
                     Cancel
