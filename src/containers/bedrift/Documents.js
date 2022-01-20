@@ -143,6 +143,7 @@ export default function Documents(props) {
         { id: 'title', label: 'title'},
         { id: 'description', label: 'description'},
         { id: 'orderNumber', label: 'orderNumber'},
+        { id: 'tags', label: 'Tags'},
         { id: 'downloadLink', label: 'download'},
 
     ];
@@ -331,7 +332,10 @@ export default function Documents(props) {
                         {row.description}
                         </TableCell>
                         <TableCell align="left">
-                        {row.orderNumber}
+                        {row.orderNumber ? row.orderNumber : "-"}
+                        </TableCell>
+                        <TableCell align="left">
+                        {row.chapterTags.length > 0 ? row.chapterTags.map((tag)=>(tag.id+", ")) : "-" }
                         </TableCell>
                         <TableCell align="left">
                             <IconButton 
