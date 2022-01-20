@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-key */
 import React from "react";
+import PropTypes from 'prop-types';
 
 // core components
 import GridItem from "../../components/Dashboard/Grid/GridItem.js";
@@ -7,9 +8,9 @@ import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import CustomTabs from "../../components/Dashboard/CustomTabs/CustomTabs.js";
 import DocumentsProject from "./DocumentsProject.js";
 
-export default function ViewOnePlant(props) {
+export default function ViewOneProject(props) {
     const  projectCode = props.location.state; 
-    
+
   return (
     
     <GridContainer>
@@ -19,7 +20,7 @@ export default function ViewOnePlant(props) {
             headerColor="primary"
             tabs={[
               {
-                tabName: "Documents",
+                tabName: "Project Documents",
                 tabContent: (
                  <DocumentsProject projectCode={projectCode}/>
                 ),

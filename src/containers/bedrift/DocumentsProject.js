@@ -24,7 +24,6 @@ import Button from "../../components/Dashboard/CustomButtons/Button";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 export default function DocumentsProject(props) {
-    const projectCodeold = props.projectCode;
 
     const [searchTerm, setSearchTerm] = useState(""); //for search bar
     
@@ -38,7 +37,7 @@ export default function DocumentsProject(props) {
     }; 
 
     //create document
-    const [projectCode, setProjectCode] = React.useState(projectCodeold);
+    const [projectCode, setProjectCode] = React.useState(props.projectCode);
     const [selectedImage, setSelectedImage] = useState(null);
     const [fileName, setFileName] = React.useState("");
     const [title, setTitle] = React.useState("");
@@ -46,7 +45,6 @@ export default function DocumentsProject(props) {
     const [tagId, setTagId] = React.useState([]);
     const [professionTypeId, setProfessionTypeId] = React.useState(null);
     const [documentTypeId, setDocumentTypeId] = React.useState(null);
-   const [error, setError] = React.useState("error");
 
     const notifyError = (err) => toast.info(err, {
         position: "top-right",
@@ -343,7 +341,7 @@ export default function DocumentsProject(props) {
                         padding={1}                        
                         marginTop={0}>
 
-                        <TextField id="outlined-size-small" label="projectCode" fullWidth size="small" value={projectCodeold ? projectCodeold : null} onChange={(e)=>setProjectCode(e.target.value)}/>
+                        <TextField id="outlined-size-small" label="projectCode" fullWidth size="small" value={projectCode ? projectCode : null} onChange={(e)=>setProjectCode(e.target.value)}/>
 
                         <input 
                             accept="image/*" 
@@ -415,5 +413,5 @@ export default function DocumentsProject(props) {
     )
 }
 DocumentsProject.propTypes = {
-    boligmappaNumber: PropTypes.any,
+    projectCode: PropTypes.any,
 };

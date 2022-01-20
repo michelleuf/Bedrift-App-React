@@ -1,5 +1,7 @@
 import React,{useState} from "react";
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
+
 import { api } from "../../urlConfig.js";
 import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
@@ -26,6 +28,8 @@ import GridContainer from "../../components/Dashboard/Grid/GridContainer.js";
 import Button from "../../components/Dashboard/CustomButtons/Button";
 
 export default function Projects(props) {
+    const history = useHistory();
+
     const boligmappaNumber = props.boligmappaNumber;
     const [searchTerm, setSearchTerm] = useState(""); //for search bar
 
@@ -83,11 +87,18 @@ export default function Projects(props) {
             console.log(results);
             notifySucccess();
             handleClose();
+            goToFileUpload(results.code);
         }).catch(error =>{
             console.log(error.response.data.message.en);
             notifyError(error.response.data.message.en);
           });;
       }
+
+      const goToFileUpload = (projectcode) =>{
+        history.push({
+            pathname: '/bedrift/viewoneproject/',
+            state: projectcode }); 
+    }
 
       //get Project details from api
       const [data, setData] = React.useState();
