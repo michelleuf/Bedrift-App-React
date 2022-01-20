@@ -144,6 +144,7 @@ export default function Rooms(props) {
 
       const Columns = [
         { id: 'title', label: 'Room Name'},
+        { id: 'description', label: 'Description'},
         { id: 'roomType', label: 'roomType'},
     ];
     React.useEffect(()=>{
@@ -218,6 +219,9 @@ export default function Rooms(props) {
                     <TableRow key={id}>
                         <TableCell align="left">
                         {row.title}
+                        </TableCell>
+                        <TableCell align="left">
+                        {row.description}
                         </TableCell>
                         <TableCell align="left">
                         {row.roomType.type}
